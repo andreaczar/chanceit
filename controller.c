@@ -2,11 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "ui.c"
+#include <ctype.h>
+
+#include "ui.h"
 #include "prob.h"
 #include "roll.h"
 #include "player.h"
-#include <ctype.h>
 
 
 
