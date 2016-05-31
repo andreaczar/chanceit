@@ -24,28 +24,31 @@ int  input (){
 	return 0;
 }
 int player (bool boolFirstRoll, int first_roll, int roll){
-	initialRoll = roll(2);
-		int updated_total_score = round_sum + game_score;
-		int lead = updated_total_score - opponentSum;
+//	initialRoll = roll(2);
+//		int updated_total_score = round_sum + game_score;
+//		int lead = updated_total_score - opponentSum;
+	int round_sum = 4;
+	int game_score = 6;
+	roll = 3;
 
-		if(boolFirstRoll){
-			//firstRoll();
-			boolFirstRoll == false;
-			
-
-		} else if (first_roll == roll){
-			printf("Turn over. You rolled your 'First Roll'.\n");
-			printf("Round Score: 0.\n");
-			printf("Total Score: %d.\n", game_score);
+	if(boolFirstRoll){
+		//firstRoll();
+//		boolFirstRoll == false;
 
 
-		} else {
-			printf("You rolled %d. Round Score: %d.\n", roll, round_sum);
-		}
+	} else if (first_roll == roll){
+		printf("Turn over. You rolled your 'First Roll'.\n");
+		printf("Round Score: 0.\n");
+		printf("Total Score: %d.\n", game_score);
 
-		if(first_roll != roll){
-			printf("Roll again? (Y/n)\n");
-		} 
+
+	} else {
+		printf("You rolled %d. Round Score: %d.\n", roll, round_sum);
+	}
+
+	if(first_roll != roll){
+		printf("Roll again? (Y/n)\n");
+	}
 }
 /*
 int main(){
