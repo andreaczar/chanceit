@@ -33,3 +33,5 @@
 
 .idea
 CMakeLists.txt
+
+.vagrant
