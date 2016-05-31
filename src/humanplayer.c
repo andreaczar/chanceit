@@ -7,7 +7,7 @@
  * this should probably talk to the ui.
  *
  * Should probably present some kind of output to the player (roll infos, probabilities, etc),
- * accept input then return the roll (or the skip)
+ * accept input then return the roll (or the skip with ??roll == 0??)
  */
 int playHumanTurn(Game *game){
     // talk to ui to see if user wants to roll

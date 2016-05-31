@@ -10,6 +10,35 @@
 #include "player.h"
 
 
+void switchPlayer(Player** currentPlayer, Player** p1, Player** p2){
+    if(*currentPlayer == *p1){
+        *currentPlayer = *p2;
+    } else {
+        *currentPlayer = *p1;
+    }
+}
+
+/**
+ * Play the game (all rounds) for the players tha were setup
+ * Return the winning player.
+ *
+ * DO NOT PROMPT IN HERE.  player->playTurn(game) PROMPTS.
+ *
+ * Order of operations:
+ *
+ * while(turn not over){
+ *      int roll = currentPayer->playTurn(game);
+ * }
+ *
+ *
+ * switchPlayer(...);
+ * currentPlayer->playTurn(game);
+ */
+Player playGame(Game game, Player currentPlayer, Player p1, Player p2){
+
+}
+
+
 int main() {
     int playMode, playerRoll, opponentRoll, turnPlayer, turnOpponent, initialRoll;
     int currRound = 1;
@@ -30,9 +59,9 @@ int main() {
     Player* p1;
     Player* p2;
 
-    bool again = rollAgain();
-
     Player* currentPlayer;
+
+
 
     int p1Roll, p2Roll;
 
@@ -62,6 +91,11 @@ int main() {
             } else {
                 currentPlayer = p2;
             }
+
+            printf("Current player: %s\n", currentPlayer->name);
+            switchPlayer(&currentPlayer, &p1, &p2);
+            printf("Current player: %s\n", currentPlayer->name);
+
             break;
 
         case 2:
