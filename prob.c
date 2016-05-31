@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "prob.h"
 
 // PASS IN FIRST ROLL, RETURN STRING(chance of rolling again)
 const char * prob(int firstRoll)
