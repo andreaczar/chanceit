@@ -2,11 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "ui2.h"
+#include "ui.c"
 #include "prob.h"
 #include "roll.h"
 #include "player.h"
 #include <ctype.h>
+
+
+
 int main(){
        int mode, totalRounds, playerRoll, opponentRoll, turnP, turnO, initialRoll;
        int currRound = 1;
