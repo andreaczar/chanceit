@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "ui.h"
+#include "input.h"
 
 void displayMenu(){
     printf("***********************************************************\n");

@@ -11,7 +11,7 @@
 
 
 int main() {
-    int mode, totalRounds, playerRoll, opponentRoll, turnP, turnO, initialRoll;
+    int mode, totalRounds, playerRoll, opponentRoll, turnPlayer, turnOpponent, initialRoll;
     int currRound = 1;
     bool firstRoll = true;
     time_t t;
@@ -19,7 +19,8 @@ int main() {
     srand((unsigned) time(&t));
 
     displayMenu();
-    scanf(" %d", &mode);
+
+    scanf("%d", &mode);
 
     switch (mode) {
         case 1:
@@ -27,17 +28,18 @@ int main() {
             amtRounds();
             scanf("%d", &totalRounds);
             //if (isdigit(totalRounds)){
+
             while (totalRounds < 1 || totalRounds > 20) {
                 printf("Enter number between 1 and 20\n");
                 scanf(" %d", &totalRounds);
             }
 
-            turnP = roll(1);
-            turnO = roll(1);
-            printf("%d\n", turnP);
-            printf("%d\n", turnO);
-            startRound(turnP, turnO, currRound, totalRounds);
-            if (turnP > turnO) {
+            turnPlayer = roll(1);
+            turnOpponent = roll(1);
+            printf("%d\n", turnPlayer);
+            printf("%d\n", turnOpponent);
+            startRound(turnPlayer, turnOpponent, currRound, totalRounds);
+            if (turnPlayer > turnOpponent) {
                 //Function call stuff in UI and player.
             }
             //while (game isn't over)

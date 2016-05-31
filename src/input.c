@@ -1,3 +1,8 @@
+#include <math.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "input.h"
 
 #define true 1
 #define false 0
@@ -11,7 +16,10 @@ void discardInput() {
     } while (tmp != EOF && tmp != '\n');
 }
 // Collect an integer entered on the command line and check if it is valid
-int getInt() {
+int getInt(char *prompt) {
+
+    printf("%s: ", prompt);
+
     int tmp = 0;
     bool isNegative = false;
     int counter = 0;
@@ -60,12 +68,14 @@ int getInt() {
     return number;
 }
 
-long getLong()
+long getLong(char *prompt)
 {
     long tmp = 0;
     bool isNegative = false;
     int counter = 0;
     long number = 0;
+
+    printf("%s: ", prompt);
 
     while (true) {
         // Check input length, discard and reset if invalid
@@ -110,11 +120,13 @@ long getLong()
     return number;
 }
 
-unsigned getUnsigned()
+unsigned getUnsigned(char *prompt)
 {
     int counter = 0;
     unsigned tmp = 0;
     unsigned number = 0;
+
+    printf("%s: ", prompt);
 
     while (true) {
         // Check input length, discard and reset if invalid
