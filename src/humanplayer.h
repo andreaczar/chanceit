@@ -1,0 +1,3 @@
+
+
+int playHumanTurn(Game *game);

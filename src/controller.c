@@ -11,44 +11,59 @@
 
 
 int main() {
-    int mode, totalRounds, playerRoll, opponentRoll, turnPlayer, turnOpponent, initialRoll;
+    int playMode, playerRoll, opponentRoll, turnPlayer, turnOpponent, initialRoll;
     int currRound = 1;
     bool firstRoll = true;
     time_t t;
     //Seed
     srand((unsigned) time(&t));
 
-    displayMenu();
+    playMode = displayMenu();
 
-    scanf("%d", &mode);
+    // create a new game
+    Game* game;
+    game = malloc(sizeof(Game));
 
-    switch (mode) {
+    game->roundNumber = 1;
+
+    // create 2 different players
+    Player* p1;
+    Player* p2;
+
+    bool again = rollAgain();
+
+    Player* currentPlayer;
+
+    int p1Roll, p2Roll;
+
+    switch (playMode) {
         case 1:
 
-            amtRounds();
-            scanf("%d", &totalRounds);
-            //if (isdigit(totalRounds)){
+            game->totalRounds = amtRounds();
 
-            while (totalRounds < 1 || totalRounds > 20) {
-                printf("Enter number between 1 and 20\n");
-                scanf(" %d", &totalRounds);
+
+            p1 = getHumanPlayer("Player 1");
+            p2 = getAIPlayer("AI Player 2");
+
+            p1Roll = p1->roll(1);
+            p2Roll = p2->roll(1);
+
+            // keep rollin rollin rollin rollin
+            while(p1Roll == p2Roll){
+                p1Roll = p1->roll(1);
+                p2Roll = p2->roll(1);
             }
 
-            turnPlayer = roll(1);
-            turnOpponent = roll(1);
-            printf("%d\n", turnPlayer);
-            printf("%d\n", turnOpponent);
-            startRound(turnPlayer, turnOpponent, currRound, totalRounds);
-            if (turnPlayer > turnOpponent) {
-                //Function call stuff in UI and player.
+            // print who's going first and round count details
+            startRound(p1Roll, p2Roll, currRound, game->totalRounds);
+
+            if (p1Roll > p2Roll) {
+                currentPlayer = p1;
+            } else {
+                currentPlayer = p2;
             }
-            //while (game isn't over)
-
-            //}
-            //printf("Invalid input, dumbass\n");
-
-
             break;
+
         case 2:
             printf("Player vs Player\n");
             break;
@@ -65,4 +80,4 @@ int main() {
             printf("INVALID INPUT, DUMBFUCK!");
 
     }
-}	
+}

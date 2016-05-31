@@ -4,9 +4,7 @@
 
 #include "roll.h"
 
-int roll(int numDice)
-{
-    srand(time(NULL));
+int roll(int numDice) {
 
     if(numDice == 2)
     {

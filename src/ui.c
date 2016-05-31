@@ -3,8 +3,9 @@
 #include <stdbool.h>
 #include "ui.h"
 #include "input.h"
+#include "player.h"
 
-void displayMenu(){
+int displayMenu(){
     printf("***********************************************************\n");
     printf("*                                                         *\n");   
     printf("*                      CHANCE-IT!                         *\n");
@@ -23,14 +24,21 @@ void displayMenu(){
     printf("5 - View high scores\n");
     printf("6 - Exit program\n");
     printf("-----------------------------------------------------------\n");
-    printf("\n"); 
+
+    return getInt("\n");
 }
 
-void amtRounds(){
+int amtRounds(){
 
-    printf("-----------------------------------------------------------\n");
-    printf("Enter the number of rounds (20 is the default):\n");
-    printf("-----------------------------------------------------------\n");
+    int rounds = 0;
+
+    while (rounds < 1 || rounds > 20) {
+        printf("-----------------------------------------------------------\n");
+        printf("Enter the number of rounds (20 is the max):\n");
+        rounds = getInt("-----------------------------------------------------------\n");
+    }
+
+    return rounds;
 }
 
 void startRound(int player_roll, int opponent_roll, int roundNum, int totalRound){
@@ -58,28 +66,35 @@ void playAgain(){
     printf("Would you like to play another game? (Y/n)\n");
 }
 
-void rollStatus(bool boolFirstRoll, int first_roll, int roll, int round_sum, int game_score, int opponentSum){
+void roundOver(Player* player){
+    printf("Turn over. You rolled your 'First Roll'.\n");
+    printf("Round Score: 0.\n");
+    printf("Total Score: %d.\n", player->totalScore);
+}
 
-    int updated_total_score = round_sum + game_score;
-    int lead = updated_total_score - opponentSum;
+void roundScore(Player* player){
+    printf("%s rolled %d. Round Score: %d.\n", player->name, player->lastRoll, player->roundScore);
+}
 
-    if(boolFirstRoll){
-        printf("You rolled %d. First roll set to: %d.\n", first_roll, first_roll);
+void leadingRound(Player* winner, Player* loser){
+    int lead = winner->roundScore + winner->totalScore - loser->roundScore - loser->totalScore;
 
-    } else if (first_roll == roll){
-        printf("Turn over. You rolled your 'First Roll'.\n");
-        printf("Round Score: 0.\n");
-        printf("Total Score: %d.\n", game_score);
+    printf("You rolled %d. Round Score: %d. You are in the lead by %d!\n",
+           winner->lastRoll, winner->roundScore, lead);
 
-    } else if (updated_total_score > opponentSum){
-        printf("You rolled %d. Round Score: %d. You are in the lead by %d!\n", roll, round_sum, lead);
+}
 
-    } else {
-        printf("You rolled %d. Round Score: %d.\n", roll, round_sum);
-    }
+void pointSet(Player* player){
+    printf("You rolled %d. First roll set to: %d.\n", player->lastRoll, player->lastRoll);
+}
 
-    if(first_roll != roll){
-        printf("Roll again? (Y/n)\n");
+bool rollAgain(){
+
+    while(1){
+        char* input = getInput("Roll again? (Y/N): ");
+
+        if(input[0] == 'y' || input[0] == 'Y') return true;
+        else if(input[0] == 'n' || input[0] == 'N') return false;
     }
 }
 

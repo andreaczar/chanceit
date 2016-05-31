@@ -18,7 +18,7 @@ void discardInput() {
 // Collect an integer entered on the command line and check if it is valid
 int getInt(char *prompt) {
 
-    printf("%s: ", prompt);
+    printf("%s", prompt);
 
     int tmp = 0;
     bool isNegative = false;
@@ -75,7 +75,7 @@ long getLong(char *prompt)
     int counter = 0;
     long number = 0;
 
-    printf("%s: ", prompt);
+    printf("%s", prompt);
 
     while (true) {
         // Check input length, discard and reset if invalid
@@ -126,7 +126,7 @@ unsigned getUnsigned(char *prompt)
     unsigned tmp = 0;
     unsigned number = 0;
 
-    printf("%s: ", prompt);
+    printf("%s", prompt);
 
     while (true) {
         // Check input length, discard and reset if invalid
@@ -171,7 +171,7 @@ char *getInput(char *prompt){
 
     collectedInput = calloc(size, sizeof(char)); // allocate memory for input
 
-    printf("%s: ", prompt);
+    printf("%s", prompt);
 
     while(ch){
         ch = getc(stdin);
