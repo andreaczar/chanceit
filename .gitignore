@@ -35,3 +35,6 @@
 CMakeLists.txt
 
 .vagrant
+
+build/
+bin/
