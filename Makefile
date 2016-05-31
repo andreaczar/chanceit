@@ -3,9 +3,11 @@ BINDIR=./bin
 SRCDIR=./src
 
 chanceit:	controller roll prob ui input player game humanplayer aiplayer
+	mkdir -p $(BINDIR)
 	gcc -o $(BINDIR)/chanceit $(BUILDDIR)/roll.o $(BUILDDIR)/prob.o $(BUILDDIR)/player.o $(BUILDDIR)/ui.o $(BUILDDIR)/controller.o $(BUILDDIR)/input.o $(BUILDDIR)/game.o $(BUILDDIR)/humanplayer.o $(BUILDDIR)/aiplayer.o
 
 controller:	$(SRCDIR)/roll.h $(SRCDIR)/ui.h $(SRCDIR)/prob.h
+	mkdir -p $(BUILDDIR)
 	gcc -c $(SRCDIR)/controller.c -o $(BUILDDIR)/controller.o
 
 roll:	$(SRCDIR)/roll.c $(SRCDIR)/roll.h
