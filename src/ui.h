@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "player.h"
 // pre and post conditions here
 int displayMenu();
 
@@ -12,10 +13,13 @@ void startRound(int player_roll, int opponent_roll, int roundNum, int totalRound
 void displayProbability(int roll, int probability);
 
 // pre and post conditions here
-void playAgain();
-
-// pre and post conditions here
 void turnOver();
+
+//
+void roundOver();
+void roundScore(Player* player);
+void leadingRound(Player* winner, Player* loser);
+void pointSet(Player* player);
 
 // pre and post conditions here
 void win(int score);
@@ -23,4 +27,7 @@ void win(int score);
 // pre and post conditions here
 void highScore();
 
-bool rollAgain();
+// pre and post conditions here
+bool playAgain();
+
+char rollAgain();

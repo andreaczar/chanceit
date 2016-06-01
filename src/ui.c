@@ -3,7 +3,6 @@
 #include <stdbool.h>
 #include "ui.h"
 #include "input.h"
-#include "player.h"
 
 int displayMenu(){
     printf("***********************************************************\n");
@@ -17,7 +16,7 @@ int displayMenu(){
     printf("\n");
     printf("Enter a number to select an action: \n");
     printf("\n");
-    printf("1 - Play single player against AI\n");
+    printf("1 - Play Single Player vs AI\n");
     printf("2 - Play against an opponent on the same machine\n");
     printf("3 - Play against a network opponent\n");
     printf("4 - Play as AI over a network\n");
@@ -43,7 +42,6 @@ int amtRounds(){
 
 void startRound(int player_roll, int opponent_roll, int roundNum, int totalRound){
 
-
     printf("-----------------------------------------------------------\n");
     printf("START, Round %d/%d (Q to quit)\n", roundNum, totalRound);
     printf("-----------------------------------------------------------\n");
@@ -61,9 +59,13 @@ void displayProbability(int roll, int probability){
 }
 
 
-void playAgain(){
+bool playAgain(){
 
-    printf("Would you like to play another game? (Y/n)\n");
+//    printf("Would you like to play another game? (Y/n)\n");
+    char* input = getInput("Would you like to play another game? (Y/n): ");
+
+    if(input[0] == 'y' || input[0] == 'Y') return true;
+    else if(input[0] == 'n' || input[0] == 'N') return false;
 }
 
 void roundOver(Player* player){
@@ -71,6 +73,7 @@ void roundOver(Player* player){
     printf("Round Score: 0.\n");
     printf("Total Score: %d.\n", player->totalScore);
 }
+
 
 void roundScore(Player* player){
     printf("%s rolled %d. Round Score: %d.\n", player->name, player->lastRoll, player->roundScore);
@@ -81,20 +84,38 @@ void leadingRound(Player* winner, Player* loser){
 
     printf("You rolled %d. Round Score: %d. You are in the lead by %d!\n",
            winner->lastRoll, winner->roundScore, lead);
-
 }
+
 
 void pointSet(Player* player){
-    printf("You rolled %d. First roll set to: %d.\n", player->lastRoll, player->lastRoll);
+    printf("You rolled %d. First roll set to: %d.\n", player->lastRoll, player->point);
 }
 
-bool rollAgain(){
+
+char rollAgain(){
 
     while(1){
-        char* input = getInput("Roll again? (Y/N): ");
 
-        if(input[0] == 'y' || input[0] == 'Y') return true;
-        else if(input[0] == 'n' || input[0] == 'N') return false;
+        printf("Y to roll again.\n");
+        printf("N to end your round\n");
+        printf("P to see probailities\n");
+        printf("Q to quit\n");
+
+        char* input = getInput("Enter your choice: ");
+
+        char firstChar = input[0];
+
+        if(firstChar == 'y' || firstChar == 'Y'){
+            return 'y';
+        } else if(firstChar == 'n' || firstChar == 'N'){
+            return 'n';
+        } else if(firstChar == 'q' || firstChar == 'Q'){
+            return 'q';
+        } else if(firstChar == 'P' || firstChar == 'p'){
+            return 'p';
+        } else {
+            printf("Invalid option.\n");
+        }
     }
 }
 

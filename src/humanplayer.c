@@ -1,7 +1,7 @@
 #include <stdbool.h>
-#include "game.h"
-#include "stdio.h"
+#include <stdlib.h>
 #include "roll.h"
+#include "ui.h"
 /*
  * Play the human turn.
  *
@@ -11,15 +11,23 @@
  * accept input then return the roll (or the skip with ??roll == 0??)
  */
 bool playHumanTurn(Game *game, Player* yourPlayer, Player* opponent){
-    // talk to ui to see if user wants to roll
-    // if the user wants to roll, return a new roll
-    // otherwise return zero, or whatever.
 
-//    bool response = rollAgain();
-//    if(response){
-//        roll(2);
-//    } else {
-//        turnOver();
-//        return 0;
-//    }
+
+    char response;
+
+    while(true){
+        response = rollAgain();
+
+        if(response == 'q'){
+            exit(0);
+        } else if(response == 'y'){
+            return true;
+        } else if(response == 'n'){
+            return false;
+        } else if(response == 'p') {
+            //TODO: show probability
+        }
+    }
+
+
 }
