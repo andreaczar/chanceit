@@ -15,7 +15,7 @@ Player* initPlayer(char* name){
     player = malloc(sizeof(Player));
     player->totalScore = 0;
     player->point = 0;
-    player->roll = roll;
+    player->lastRoll = 0;
     player->name = name;
     return player;
 }

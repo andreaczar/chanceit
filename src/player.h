@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "game.h"
 
 
@@ -9,8 +10,7 @@
  * for the type of player being created.
  */
 typedef struct {
-    int(*playTurn)(Game *game); // function pointer
-    int(*roll)();
+    bool (*playTurn)(Game *game, Player* yourPlayer, Player* opponent); // function pointer
     int totalScore;
     int roundScore;
     int point;

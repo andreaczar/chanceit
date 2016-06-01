@@ -1,3 +1,3 @@
+#include <stdbool.h>
 
-
-int playAITurn(Game *game);
+bool playAITurn(Game *game, Player* yourPlayer, Player* opponent);
