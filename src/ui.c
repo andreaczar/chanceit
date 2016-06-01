@@ -4,6 +4,7 @@
 #include "ui.h"
 #include "input.h"
 
+//added
 int displayMenu(){
     printf("***********************************************************\n");
     printf("*                                                         *\n");   
@@ -26,7 +27,7 @@ int displayMenu(){
 
     return getInt("\n");
 }
-
+//added
 int amtRounds(){
 
     int rounds = 0;
@@ -40,18 +41,37 @@ int amtRounds(){
     return rounds;
 }
 
-void startRound(int player_roll, int opponent_roll, int roundNum, int totalRound){
-
-    printf("-----------------------------------------------------------\n");
-    printf("START, Round %d/%d (Q to quit)\n", roundNum, totalRound);
-    printf("-----------------------------------------------------------\n");
-
-    if(player_roll > opponent_roll){
-        printf("You rolled %d. Opponent rolled %d. You go first!\n", player_roll, opponent_roll);
-    } else {
-        printf("You rolled %d. Opponent rolled %d. Opponent goes first!\n", player_roll, opponent_roll);
-    }
+void startGame(Game *game){
+    printf("Starting game.  %d rounds.\n\n", game->totalRounds);
 }
+
+void displayPlayer(Player* player){
+    printf("Player %s's round\n", player->name);
+}
+
+//added
+void startRound(Game* game) {
+
+    printf("-----------------------------------------------------------\n");
+    printf("START, Round %d of %d (Q to quit)\n", game->roundNumber, game->totalRounds);
+    printf("-----------------------------------------------------------\n");
+}
+
+// added Determines first player
+void firstPlayer(Player* currentPlayer, Player* otherPlayer){
+    printf("%s rolled %d. ", currentPlayer->name, currentPlayer->lastRoll);
+    printf("%s rolled %d. ", otherPlayer->name, otherPlayer->lastRoll);
+    printf("%s goes first.\n", currentPlayer->name);
+}
+
+
+//
+//    if(player_roll > opponent_roll){
+//        printf("You rolled %d. Opponent rolled %d. You go first!\n", player_roll, opponent_roll);
+//    } else {
+//        printf("You rolled %d. Opponent rolled %d. Opponent goes first!\n", player_roll, opponent_roll);
+//    }
+//}
 
 void displayProbability(int roll, int probability){
 
@@ -68,13 +88,19 @@ bool playAgain(){
     else if(input[0] == 'n' || input[0] == 'N') return false;
 }
 
+//added
+void loseRound(Player* player){
+    printf("Turn over. You rolled your 'First Roll' %d.\n", player->point);
+}
+// added
 void roundOver(Player* player){
-    printf("Turn over. You rolled your 'First Roll'.\n");
-    printf("Round Score: 0.\n");
-    printf("Total Score: %d.\n", player->totalScore);
+
+    printf("\n\n=== Round Summary ===\n\n");
+    printf("Your Total round score = %d\n", player->roundScore);
+    printf("Your Total game score = %d\n\n", player->totalScore);
 }
 
-
+//added
 void roundScore(Player* player){
     printf("%s rolled %d. Round Score: %d.\n", player->name, player->lastRoll, player->roundScore);
 }
@@ -118,13 +144,9 @@ char rollAgain(){
         }
     }
 }
-
-void turnOver(){
-    printf("Turn Over\n");
-}
-
-void win(int score){
-    printf("Your score is: %d. YOU WIN!\n", score);
+//added
+void win(Player* player){
+    printf("%s score is: %d. YOU WIN!\n", player->name, player->totalScore);
 }
 
 void highScore(){
@@ -133,5 +155,12 @@ void highScore(){
     printf("-----------------------------------------------------------\n");
 }
 
+void gameSummary(Player* p1, Player* p2){
 
+    printf("\n\n==== Game Summary ====\n\n");
+    printf("Player 1: %s\t Total Score: %d\n", p1->name, p1->totalScore);
+    printf("Player 2: %s\t Total Score: %d\n", p2->name, p2->totalScore);
+    printf("\n");
+
+}
 

@@ -48,6 +48,11 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
     yourPlayer->rollCount = 0;
     yourPlayer->roundScore = 0;
 
+    displayPlayer(yourPlayer);
+
+    printf("Player %s - point set: %d\n", yourPlayer->name, yourPlayer->point);
+
+
     while(true){
 
         // call the function pointer for this type of player to
@@ -63,10 +68,14 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
 
         if(yourPlayer->lastRoll == yourPlayer->point){
             //TODO: print round reset and lost
+            yourPlayer->roundScore = 0;
+            loseRound(yourPlayer);
+
             break;
         } else {
             yourPlayer->roundScore += yourPlayer->lastRoll;
             //TODO: print current round info
+            roundScore(yourPlayer);
         }
 
         yourPlayer->rollCount++;
@@ -74,7 +83,9 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
 
     yourPlayer->totalScore += yourPlayer->roundScore;
 
-    //TODO: print round over summary for current player
+    // print round over summary for current player
+    roundOver(yourPlayer);
+
 }
 
 
@@ -86,7 +97,8 @@ void playGame(Game* game, Player* p1, Player* p2){
     Player* currentPlayer;
     Player* otherPlayer;
 
-    //TODO: print game information (Number of rounds, player names?)
+    //print game information (Number of rounds, player names?)
+    startGame(game);
 
     int p1Roll = roll(1);
     int p2Roll = roll(1);
@@ -97,20 +109,28 @@ void playGame(Game* game, Player* p1, Player* p2){
         p2Roll = roll(1);
     }
 
+    p1->lastRoll = p1Roll;
+    p2->lastRoll = p2Roll;
+
     // determine current player and other player
     if (p1Roll > p2Roll) {
         currentPlayer = p1;
         otherPlayer = p2;
+
     } else {
         currentPlayer = p2;
         otherPlayer = p1;
     }
 
-    //TODO: print game start (who's going first)
+
+    //print game start (who's going first)
+    firstPlayer(currentPlayer, otherPlayer);
+
 
     while(game->roundNumber <= game->totalRounds){
 
         // print current round start
+        startRound(game);
 
         // player the first players round
         playRound(game, currentPlayer, otherPlayer);
@@ -125,29 +145,37 @@ void playGame(Game* game, Player* p1, Player* p2){
         game->roundNumber++;
     }
 
-    return;
 
     //TODO: print game over, determine and show winner
+    printf("Game Over");
 
+    gameSummary(p1, p2);
+
+    if(p1->totalScore > p2->totalScore){
+        win(p1);
+    }else{
+        win(p2);
+    }
+
+    return;
 }
 
 
 int main() {
     int playMode, playerRoll, opponentRoll, turnPlayer, turnOpponent, initialRoll;
-//    int currRound = 1;
-    int lastRoll=0;
+    int lastRoll = 0;
     int scoreRound = 0;
     int totalScore = 0;
     bool quitRound = false;
     bool again;
 
     // create a new game
-    Game* game;
+    Game *game;
     game = malloc(sizeof(Game));
 
     // create 2 different players
-    Player* p1;
-    Player* p2;
+    Player *p1;
+    Player *p2;
 
     playMode = displayMenu();
 
@@ -185,7 +213,8 @@ int main() {
             printf("High score table\n");
             break;
         default:
-            printf("INVALID INPUT, DUMBFUCK!");
+            printf("INVALID INPUT!");
 
     }
+
 }
