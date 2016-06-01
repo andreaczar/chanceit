@@ -7,14 +7,16 @@
 #include "ui.h"
 #include "prob.h"
 #include "roll.h"
-#include "player.h"
+#include "input.h"
 
 
-void switchPlayer(Player** currentPlayer, Player** p1, Player** p2){
+void switchPlayer(Player** currentPlayer, Player** otherPlayer, Player** p1, Player** p2){
     if(*currentPlayer == *p1){
         *currentPlayer = *p2;
+        *otherPlayer = *p1;
     } else {
         *currentPlayer = *p1;
+        *otherPlayer = *p2;
     }
 }
 
@@ -34,73 +36,173 @@ void switchPlayer(Player** currentPlayer, Player** p1, Player** p2){
  * switchPlayer(...);
  * currentPlayer->playTurn(game);
  */
-Player playGame(Game game, Player currentPlayer, Player p1, Player p2){
 
+void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
+
+    bool doRoll;
+    int playerRoll;
+
+    // set the point and initialize round variables
+    playerRoll = roll(2);
+    yourPlayer->point = playerRoll;
+    yourPlayer->rollCount = 0;
+    yourPlayer->roundScore = 0;
+
+    displayPlayer(yourPlayer);
+
+    printf("Player %s - point set: %d\n", yourPlayer->name, yourPlayer->point);
+
+
+    while(true){
+
+        // call the function pointer for this type of player to
+        // determine if they want to roll again.
+        doRoll = yourPlayer->playTurn(game, yourPlayer, otherPlayer);
+
+        // player does not want to roll, end round for player
+        if(!doRoll){
+            break;
+        }
+
+        yourPlayer->lastRoll = roll(2);
+
+        if(yourPlayer->lastRoll == yourPlayer->point){
+            //TODO: print round reset and lost
+            yourPlayer->roundScore = 0;
+            loseRound(yourPlayer);
+
+            break;
+        } else {
+            yourPlayer->roundScore += yourPlayer->lastRoll;
+            //TODO: print current round info
+            roundScore(yourPlayer);
+        }
+
+        yourPlayer->rollCount++;
+    }
+
+    yourPlayer->totalScore += yourPlayer->roundScore;
+
+    // print round over summary for current player
+    roundOver(yourPlayer);
+
+}
+
+
+void playGame(Game* game, Player* p1, Player* p2){
+
+    time_t t;
+    srand((unsigned) time(&t));
+
+    Player* currentPlayer;
+    Player* otherPlayer;
+
+    //print game information (Number of rounds, player names?)
+    startGame(game);
+
+    int p1Roll = roll(1);
+    int p2Roll = roll(1);
+
+    // keep rollin rollin rollin rollin
+    while(p1Roll == p2Roll){
+        p1Roll = roll(1);
+        p2Roll = roll(1);
+    }
+
+    p1->lastRoll = p1Roll;
+    p2->lastRoll = p2Roll;
+
+    // determine current player and other player
+    if (p1Roll > p2Roll) {
+        currentPlayer = p1;
+        otherPlayer = p2;
+
+    } else {
+        currentPlayer = p2;
+        otherPlayer = p1;
+    }
+
+
+    //print game start (who's going first)
+    firstPlayer(currentPlayer, otherPlayer);
+
+
+    while(game->roundNumber <= game->totalRounds){
+
+        // print current round start
+        startRound(game);
+
+        // player the first players round
+        playRound(game, currentPlayer, otherPlayer);
+        switchPlayer(&currentPlayer, &otherPlayer, &p1, &p2);
+
+        // play second players round
+        playRound(game, currentPlayer, otherPlayer);
+
+        //TODO: print current round over
+
+        // go to next turn
+        game->roundNumber++;
+    }
+
+
+    //TODO: print game over, determine and show winner
+    printf("Game Over");
+
+    gameSummary(p1, p2);
+
+    if(p1->totalScore > p2->totalScore){
+        win(p1);
+    }else{
+        win(p2);
+    }
+
+    return;
 }
 
 
 int main() {
     int playMode, playerRoll, opponentRoll, turnPlayer, turnOpponent, initialRoll;
-    int currRound = 1;
-    bool firstRoll = true;
-    time_t t;
-    //Seed
-    srand((unsigned) time(&t));
-
-    playMode = displayMenu();
+    int lastRoll = 0;
+    int scoreRound = 0;
+    int totalScore = 0;
+    bool quitRound = false;
+    bool again;
 
     // create a new game
-    Game* game;
+    Game *game;
     game = malloc(sizeof(Game));
 
-    game->roundNumber = 1;
-
     // create 2 different players
-    Player* p1;
-    Player* p2;
+    Player *p1;
+    Player *p2;
 
-    Player* currentPlayer;
-
-
-
-    int p1Roll, p2Roll;
+    playMode = displayMenu();
 
     switch (playMode) {
         case 1:
 
             game->totalRounds = amtRounds();
-
+            game->roundNumber = 1;
 
             p1 = getHumanPlayer("Player 1");
             p2 = getAIPlayer("AI Player 2");
 
-            p1Roll = p1->roll(1);
-            p2Roll = p2->roll(1);
-
-            // keep rollin rollin rollin rollin
-            while(p1Roll == p2Roll){
-                p1Roll = p1->roll(1);
-                p2Roll = p2->roll(1);
-            }
-
-            // print who's going first and round count details
-            startRound(p1Roll, p2Roll, currRound, game->totalRounds);
-
-            if (p1Roll > p2Roll) {
-                currentPlayer = p1;
-            } else {
-                currentPlayer = p2;
-            }
-
-            printf("Current player: %s\n", currentPlayer->name);
-            switchPlayer(&currentPlayer, &p1, &p2);
-            printf("Current player: %s\n", currentPlayer->name);
+            playGame(game, p1, p2);
 
             break;
 
         case 2:
-            printf("Player vs Player\n");
+            game->totalRounds = amtRounds();
+            game->roundNumber = 1;
+
+            p1 = getHumanPlayer("Player 1");
+            p2 = getHumanPlayer("Player 2");
+
+            playGame(game, p1, p2);
+
             break;
+
         case 3:
             printf("Player vs Network\n");
             break;
@@ -111,7 +213,8 @@ int main() {
             printf("High score table\n");
             break;
         default:
-            printf("INVALID INPUT, DUMBFUCK!");
+            printf("INVALID INPUT!");
 
     }
+
 }
