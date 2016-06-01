@@ -15,6 +15,8 @@ Player* initPlayer(char* name){
     player->totalScore = 0;
     player->point = 0;
     player->lastRoll = 0;
+    player->firstRoll = 0;
+    player->rollNum = 0;
     player->name = name;
     return player;
 }
