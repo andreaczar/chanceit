@@ -1,7 +1,6 @@
 #include "stdlib.h"
 
 #include "player.h"
-
 #include "humanplayer.h"
 #include "aiplayer.h"
 #include "roll.h"

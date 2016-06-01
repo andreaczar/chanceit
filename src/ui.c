@@ -40,16 +40,16 @@ int amtRounds(){
 
     return rounds;
 }
-
+// Added -- Displays the start of the game and the number of rounds in the game
 void startGame(Game *game){
     printf("Starting game.  %d rounds.\n\n", game->totalRounds);
 }
-
+// added -- Displays player name
 void displayPlayer(Player* player){
     printf("Player %s's round\n", player->name);
 }
 
-//added
+//added -- displays round number
 void startRound(Game* game) {
 
     printf("-----------------------------------------------------------\n");
@@ -73,26 +73,18 @@ void firstPlayer(Player* currentPlayer, Player* otherPlayer){
 //    }
 //}
 
-void displayProbability(int roll, int probability){
+// Needs to be added to humanplayer.c
+
+void displayProbability(Player* player, int probability){
 
     printf("The probability of rolling %d again is: %d%%\n", roll, probability);
 }
 
-
-bool playAgain(){
-
-//    printf("Would you like to play another game? (Y/n)\n");
-    char* input = getInput("Would you like to play another game? (Y/n): ");
-
-    if(input[0] == 'y' || input[0] == 'Y') return true;
-    else if(input[0] == 'n' || input[0] == 'N') return false;
-}
-
-//added
+//added -- lose rounds message
 void loseRound(Player* player){
     printf("Turn over. You rolled your 'First Roll' %d.\n", player->point);
 }
-// added
+//added displays round over game summary for current player
 void roundOver(Player* player){
 
     printf("\n\n=== Round Summary ===\n\n");
@@ -100,31 +92,25 @@ void roundOver(Player* player){
     printf("Your Total game score = %d\n\n", player->totalScore);
 }
 
-//added
+//added -- displays player name, last roll, and updated round score
 void roundScore(Player* player){
     printf("%s rolled %d. Round Score: %d.\n", player->name, player->lastRoll, player->roundScore);
 }
 
-void leadingRound(Player* winner, Player* loser){
-    int lead = winner->roundScore + winner->totalScore - loser->roundScore - loser->totalScore;
 
-    printf("You rolled %d. Round Score: %d. You are in the lead by %d!\n",
-           winner->lastRoll, winner->roundScore, lead);
-}
-
-
+// MUST ADD: Add in playRound
 void pointSet(Player* player){
-    printf("You rolled %d. First roll set to: %d.\n", player->lastRoll, player->point);
+    printf("Player %s - point set: %d.\n", player->name, player->point);
 }
 
-
+/// Added to humanplayer.c
 char rollAgain(){
 
     while(1){
 
         printf("Y to roll again.\n");
         printf("N to end your round\n");
-        printf("P to see probailities\n");
+        printf("P to see probabilities\n");
         printf("Q to quit\n");
 
         char* input = getInput("Enter your choice: ");
@@ -144,17 +130,11 @@ char rollAgain(){
         }
     }
 }
-//added
+//added -- Displays the winner
 void win(Player* player){
     printf("%s score is: %d. YOU WIN!\n", player->name, player->totalScore);
 }
-
-void highScore(){
-    printf("-----------------------------------------------------------\n");
-    printf("Congratulations, you have a high score!\nPlease enter your name: \n");
-    printf("-----------------------------------------------------------\n");
-}
-
+// added -- displays score for both players at the end of the game
 void gameSummary(Player* p1, Player* p2){
 
     printf("\n\n==== Game Summary ====\n\n");
@@ -164,3 +144,26 @@ void gameSummary(Player* p1, Player* p2){
 
 }
 
+// **Not added yet
+void highScore(){
+    printf("-----------------------------------------------------------\n");
+    printf("Congratulations, you have a high score!\nPlease enter your name: \n");
+    printf("-----------------------------------------------------------\n");
+}
+// ** Not added
+bool playAgain(){
+
+//    printf("Would you like to play another game? (Y/n)\n");
+    char* input = getInput("Would you like to play another game? (Y/n): ");
+
+    if(input[0] == 'y' || input[0] == 'Y') return true;
+    else if(input[0] == 'n' || input[0] == 'N') return false;
+}
+
+/// *** NOT ADDED
+void leadingRound(Player* winner, Player* loser){
+    int lead = winner->roundScore + winner->totalScore - loser->roundScore - loser->totalScore;
+
+    printf("You rolled %d. Round Score: %d. You are in the lead by %d!\n",
+           winner->lastRoll, winner->roundScore, lead);
+}

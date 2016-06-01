@@ -9,7 +9,7 @@
 #include "roll.h"
 #include "input.h"
 
-
+// switch player
 void switchPlayer(Player** currentPlayer, Player** otherPlayer, Player** p1, Player** p2){
     if(*currentPlayer == *p1){
         *currentPlayer = *p2;
@@ -23,18 +23,7 @@ void switchPlayer(Player** currentPlayer, Player** otherPlayer, Player** p1, Pla
 /**
  * Play the game (all rounds) for the players tha were setup
  * Return the winning player.
- *
- * DO NOT PROMPT IN HERE.  player->playTurn(game) PROMPTS.
- *
- * Order of operations:
- *
- * while(turn not over){
- *      int roll = currentPayer->playTurn(game);
- * }
- *
- *
- * switchPlayer(...);
- * currentPlayer->playTurn(game);
+
  */
 
 void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
@@ -51,7 +40,7 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
     displayPlayer(yourPlayer);
 
     printf("Player %s - point set: %d\n", yourPlayer->name, yourPlayer->point);
-
+    pointSet(yourPlayer);
 
     while(true){
 
@@ -67,17 +56,16 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
         yourPlayer->lastRoll = roll(2);
 
         if(yourPlayer->lastRoll == yourPlayer->point){
-            //TODO: print round reset and lost
+            //print round reset and lost
             yourPlayer->roundScore = 0;
             loseRound(yourPlayer);
 
             break;
         } else {
             yourPlayer->roundScore += yourPlayer->lastRoll;
-            //TODO: print current round info
+            // print current round info
             roundScore(yourPlayer);
         }
-
         yourPlayer->rollCount++;
     }
 
@@ -85,7 +73,6 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
 
     // print round over summary for current player
     roundOver(yourPlayer);
-
 }
 
 
@@ -122,10 +109,8 @@ void playGame(Game* game, Player* p1, Player* p2){
         otherPlayer = p1;
     }
 
-
     //print game start (who's going first)
     firstPlayer(currentPlayer, otherPlayer);
-
 
     while(game->roundNumber <= game->totalRounds){
 
@@ -139,14 +124,14 @@ void playGame(Game* game, Player* p1, Player* p2){
         // play second players round
         playRound(game, currentPlayer, otherPlayer);
 
-        //TODO: print current round over
+        //print current round over
 
         // go to next turn
         game->roundNumber++;
     }
 
 
-    //TODO: print game over, determine and show winner
+    // print game over, determine and show winner
     printf("Game Over");
 
     gameSummary(p1, p2);

@@ -25,7 +25,8 @@ bool playHumanTurn(Game *game, Player* yourPlayer, Player* opponent){
         } else if(response == 'n'){
             return false;
         } else if(response == 'p') {
-            //TODO: show probability
+            //show probability
+
         }
     }
 

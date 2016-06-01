@@ -1,41 +1,121 @@
 #include <stdbool.h>
 #include "player.h"
-// pre and post conditions here
+
+/**
+ * Precondition: N/A
+ * Postcondition: N/A
+ * Return: integer to select play mode
+ */
 int displayMenu();
 
-// pre and post conditions here
+/**
+ * Precondition: N/A
+ * Postcondition: N/A
+ * Return: number of rounds
+ */
 int amtRounds();
 
-// pre and post conditions here
-//void startRound(int player_roll, int opponent_roll, int roundNum, int totalRound);
-void startRound(Game* game);
-// pre and post conditions here
-void displayProbability(int roll, int probability);
-
-// pre and post conditions here
-void roundOver();
-
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
 void startGame(Game *game);
 
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
 void displayPlayer(Player* player);
 
-void gameSummary(Player* p1, Player* p2);
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
+void startRound(Game* game);
 
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
 void firstPlayer(Player* currentPlayer, Player* otherPlayer);
 
-//
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
+void displayProbability(int roll, int probability);
+
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
 void loseRound();
+
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
+void roundOver();
+
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
 void roundScore(Player* player);
-void leadingRound(Player* winner, Player* loser);
+
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
 void pointSet(Player* player);
 
-// pre and post conditions here
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
+char rollAgain();
+
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
 void win(Player* player);
 
-// pre and post conditions here
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
+void gameSummary(Player* p1, Player* p2);
+
+
+//Not implemented yet
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
 void highScore();
-
-// pre and post conditions here
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
 bool playAgain();
-
-char rollAgain();
+/**
+ * Precondition:
+ * Postcondition:
+ * Return:
+ */
+void leadingRound(Player* winner, Player* loser);
