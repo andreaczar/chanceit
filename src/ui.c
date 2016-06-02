@@ -90,8 +90,8 @@ void loseRound(Player* player){
 void roundOver(Player* player){
 
     printf("\n\n===== Round Summary =====\n\n");
-    printf("Your Total round score = %d\n", player->roundScore);
-    printf("Your Total game score = %d\n\n", player->totalScore);
+    printf("%s: Total round score = %d\n", player->name, player->roundScore);
+    printf("%s: Total game score = %d\n\n", player->name, player->totalScore);
     printf("==========================\n\n");
 }
 
@@ -133,7 +133,7 @@ char rollAgain(){
 }
 //added -- Displays the winner
 void win(Player* player){
-    printf("%s score is: %d. \tYOU WIN!\n", player->name, player->totalScore);
+    printf("%s score is: %d. \tYOU WIN!\n\n", player->name, player->totalScore);
 }
 // added -- displays score for both players at the end of the game
 void gameSummary(Player* p1, Player* p2){
@@ -168,3 +168,4 @@ void leadingRound(Player* winner, Player* loser){
     printf("You rolled %d. Round Score: %d. You are in the lead by %d!\n",
            winner->lastRoll, winner->roundScore, lead);
 }
+

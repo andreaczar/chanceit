@@ -125,6 +125,10 @@ void playGame(Game* game, Player* p1, Player* p2){
 
         // play second players round
         playRound(game, currentPlayer, otherPlayer);
+
+        // summary of game score
+        gameSummary(p1, p2);
+
         switchPlayer(&currentPlayer, &otherPlayer, &p1, &p2);
 
 
@@ -136,12 +140,14 @@ void playGame(Game* game, Player* p1, Player* p2){
 
 
     // print game over, determine and show winner
-    printf("Game Over");
+    printf("GAME OVER!\n");
 
-    gameSummary(p1, p2);
+//    gameSummary(p1, p2);
 
-    if(p1->totalScore > p2->totalScore){
+    if(p1->totalScore > p2->totalScore) {
         win(p1);
+    } else if (p1->totalScore == p2->totalScore){
+        printf("It's a tie!");
     }else{
         win(p2);
     }
