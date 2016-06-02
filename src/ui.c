@@ -43,6 +43,7 @@ int amtRounds(){
 // Added -- Displays the start of the game and the number of rounds in the game
 void startGame(Game *game){
     printf("Starting game.  %d rounds.\n\n", game->totalRounds);
+    printf("Rules: [Y] - roll again. [N] - end the round. [P] - view probability, [Q] to quit\n\n");
 }
 // added -- Displays player name
 void displayPlayer(Player* player){
@@ -100,7 +101,7 @@ void roundScore(Player* player){
 
 // MUST ADD: Add in playRound
 void pointSet(Player* player){
-    printf("Player %s - point set: %d.\n", player->name, player->point);
+    printf("Player %s - Point set: %d.\n", player->name, player->point);
 }
 
 /// Added to humanplayer.c
@@ -108,10 +109,8 @@ char rollAgain(){
 
     while(1){
 
-        printf("Y to roll again.\n");
-        printf("N to end your round\n");
-        printf("P to see probabilities\n");
-        printf("Q to quit\n");
+
+        printf("Roll again? (Y/N)\n");
 
         char* input = getInput("Enter your choice: ");
 
