@@ -24,7 +24,7 @@ bool playAITurn(Game *game, Player* yourPlayer, Player* opponent){
 		}
 	}
 	// 5 or 9 have a 1/9 chance of being rolled again
-	else if (yourPlayer->point == 1 || yourPlayer->point == 9){
+	else if (yourPlayer->point == 5 || yourPlayer->point == 9){
 		if(yourPlayer->rollCount < 5){
 			return true;
 		}

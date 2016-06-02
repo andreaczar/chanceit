@@ -62,6 +62,8 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
 
             break;
         } else {
+            yourPlayer->roundScore += yourPlayer->point;
+
             yourPlayer->roundScore += yourPlayer->lastRoll;
             // print current round info
             roundScore(yourPlayer);
@@ -123,6 +125,8 @@ void playGame(Game* game, Player* p1, Player* p2){
 
         // play second players round
         playRound(game, currentPlayer, otherPlayer);
+        switchPlayer(&currentPlayer, &otherPlayer, &p1, &p2);
+
 
         //print current round over
 
