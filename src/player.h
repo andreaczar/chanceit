@@ -24,13 +24,25 @@ struct gamePlayer {
 };
 
 
-// Sets up and returns a Human player
+/**
+ * Precondition: A game has been established
+ * Postcondition: Sets up and makes a human player
+ * Return: A human player
+ */
 Player* getHumanPlayer(char* name);
 
 
-// Sets up and returns a Network player
+/**
+ * Precondition: A game has been established
+ * Postcondition: Sets up and makes a network player
+ * Return: A network player
+ */
 Player* getNetworkPlayer(char* name);
 
 
-// Sets up and returns an AI player
+/**
+ * Precondition: A game has been established
+ * Postcondition: Sets up and makes a AI player
+ * Return: An AI player
+ */
 Player* getAIPlayer(char* name);

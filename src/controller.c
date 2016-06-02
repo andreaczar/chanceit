@@ -39,7 +39,7 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
 
     displayPlayer(yourPlayer);
 
-    printf("Player %s - point set: %d\n", yourPlayer->name, yourPlayer->point);
+//    printf("Player %s - point set: %d\n", yourPlayer->name, yourPlayer->point);
     pointSet(yourPlayer);
 
     while(true){

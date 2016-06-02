@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "ui.h"
 #include "input.h"
+#include "prob.h"
 
 //added
 int displayMenu(){
@@ -22,7 +23,8 @@ int displayMenu(){
     printf("3 - Play against a network opponent\n");
     printf("4 - Play as AI over a network\n");
     printf("5 - View high scores\n");
-    printf("6 - Exit program\n");
+    printf("6 - Exit program\n\n");
+    printf("Rules: [Y] - roll again. [N] - end the round. [P] - view probability, [Q] to quit\n");
     printf("-----------------------------------------------------------\n");
 
     return getInt("\n");
@@ -42,12 +44,11 @@ int amtRounds(){
 }
 // Added -- Displays the start of the game and the number of rounds in the game
 void startGame(Game *game){
-    printf("Starting game.  %d rounds.\n\n", game->totalRounds);
-    printf("Rules: [Y] - roll again. [N] - end the round. [P] - view probability, [Q] to quit\n\n");
+    printf("Starting Game:  %d rounds.\n\n", game->totalRounds);
 }
 // added -- Displays player name
 void displayPlayer(Player* player){
-    printf("Player %s's round\n", player->name);
+    printf("**Player %s's round**\n\n", player->name);
 }
 
 //added -- displays round number
@@ -60,9 +61,9 @@ void startRound(Game* game) {
 
 // added Determines first player
 void firstPlayer(Player* currentPlayer, Player* otherPlayer){
-    printf("%s rolled %d. ", currentPlayer->name, currentPlayer->lastRoll);
-    printf("%s rolled %d. ", otherPlayer->name, otherPlayer->lastRoll);
-    printf("%s goes first.\n", currentPlayer->name);
+    printf("%s\t rolled: %d. \n", currentPlayer->name, currentPlayer->lastRoll);
+    printf("%s\t rolled: %d. \n\n", otherPlayer->name, otherPlayer->lastRoll);
+    printf("**%s goes first.**\n\n", currentPlayer->name);
 }
 
 
@@ -76,26 +77,27 @@ void firstPlayer(Player* currentPlayer, Player* otherPlayer){
 
 // Needs to be added to humanplayer.c
 
-void displayProbability(Player* player, int probability){
-
-    printf("The probability of rolling %d again is: %d%%\n", roll, probability);
-}
+//void displayProbability(Player* player, int probability){
+//
+//    printf("The probability of rolling %d again is: %d%%\n", roll, probability);
+//}
 
 //added -- lose rounds message
 void loseRound(Player* player){
-    printf("Turn over. You rolled your 'First Roll' %d.\n", player->point);
+    printf("\nTurn over! \nYou rolled your 'First Roll': %d.\n", player->point);
 }
 //added displays round over game summary for current player
 void roundOver(Player* player){
 
-    printf("\n\n=== Round Summary ===\n\n");
+    printf("\n\n===== Round Summary =====\n\n");
     printf("Your Total round score = %d\n", player->roundScore);
     printf("Your Total game score = %d\n\n", player->totalScore);
+    printf("==========================\n\n");
 }
 
 //added -- displays player name, last roll, and updated round score
 void roundScore(Player* player){
-    printf("%s rolled %d. Round Score: %d.\n", player->name, player->lastRoll, player->roundScore);
+    printf("%s rolled %d. \tRound Score: %d.\n", player->name, player->lastRoll, player->roundScore);
 }
 
 
@@ -110,9 +112,9 @@ char rollAgain(){
     while(1){
 
 
-        printf("Roll again? (Y/N)\n");
+        printf("Roll again? (Y/N/P/Q)\n");
 
-        char* input = getInput("Enter your choice: ");
+        char* input = getInput(" ");
 
         char firstChar = input[0];
 
@@ -131,15 +133,15 @@ char rollAgain(){
 }
 //added -- Displays the winner
 void win(Player* player){
-    printf("%s score is: %d. YOU WIN!\n", player->name, player->totalScore);
+    printf("%s score is: %d. \tYOU WIN!\n", player->name, player->totalScore);
 }
 // added -- displays score for both players at the end of the game
 void gameSummary(Player* p1, Player* p2){
 
-    printf("\n\n==== Game Summary ====\n\n");
+    printf("\n\n============== Game Summary =============\n\n");
     printf("Player 1: %s\t Total Score: %d\n", p1->name, p1->totalScore);
     printf("Player 2: %s\t Total Score: %d\n", p2->name, p2->totalScore);
-    printf("\n");
+    printf("=============================================\n\n");
 
 }
 

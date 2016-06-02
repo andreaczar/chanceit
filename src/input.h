@@ -1,16 +1,26 @@
-//
-// Created by Andrea on 2016-05-30.
-//
 
-// Returns an int from stdin. In case of invalid input, the user is reprompted until valid input is provided.
-int getInt(char *prompt);
+/**
+ * Precondition: N/A
+ * Postcondition: Input is gathered from the user.
+ * Return: An integer that the user put in or an error message.
+ */int getInt(char *prompt);
 
-// Returns a long from stdin. In case of invalid input, the user is reprompted until valid input is provided.
-long getLong(char *prompt);
+/**
+ * Precondition: N/A
+ * Postcondition: Input is gathered from the user.
+ * Return: Number of long type that the user put in or an error message.
+ */long getLong(char *prompt);
 
-// Returns an unsigned from stdin. In case of invalid input, the user is reprompted until valid input is provided.
-unsigned getUnsigned(char *prompt);
+/**
+ * Precondition: N/A
+ * Postcondition: Input is gathered from the user.
+ * Return: An unsigned number that the user put in or an error message.
+ */unsigned getUnsigned(char *prompt);
 
 
-// prompts for input and collects a string from the user
+/**
+ * Precondition: N/A
+ * Postcondition: Input is gathered from the user.
+ * Return: Character(s) that the user put in or an error message.
+ */
 char* getInput(char *prompt);
