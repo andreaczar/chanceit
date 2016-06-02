@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "player.h"
 #include "prob.h"
+
 
 // PASS IN FIRST ROLL, RETURN STRING(chance of rolling again)
 double prob(Player* player)
