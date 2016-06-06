@@ -4,28 +4,46 @@
 #include "ui.h"
 #include "input.h"
 #include "prob.h"
+#include "highscore.h"
 
+void printBar(){
+    printf("*****************************************************************\n");
+}
+
+//print stars on both sides of empty line
+void printSide(){
+    printf("*\t %-55s*\n", "");
+}
 //added
 int displayMenu(){
-    printf("***********************************************************\n");
-    printf("*                                                         *\n");   
-    printf("*                      CHANCE-IT!                         *\n");
-    printf("*                                                         *\n"); 
-    printf("***********************************************************\n");
-
-    printf("-----------------------------------------------------------\n");
-    printf("MAIN MENU\n");
-    printf("\n");
-    printf("Enter a number to select an action: \n");
-    printf("\n");
-    printf("1 - Play Single Player vs AI\n");
-    printf("2 - Play against an opponent on the same machine\n");
-    printf("3 - Play against a network opponent\n");
-    printf("4 - Play as AI over a network\n");
-    printf("5 - View high scores\n");
-    printf("6 - Exit program\n\n");
-    printf("Rules: [Y] - roll again. [N] - end the round. [P] - view probability, [Q] to quit\n");
-    printf("-----------------------------------------------------------\n");
+    printf("\n\n\n");
+    printBar();
+    printf("*\t   _____ _                          _____ _   \t\t*\n"
+           "*\t  / ____| |                        |_   _| |  \t\t*\n"
+           "*\t | |    | |__   __ _ _ __   ___ ___  | | | |_ \t\t*\n"
+           "*\t | |    | '_ \\ / _` | '_ \\ / __/ _ \\ | | | __|\t\t*\n"
+           "*\t | |____| | | | (_| | | | | (_|  __/_| |_| |_ \t\t*\n"
+           "*\t  \\_____|_| |_|\\__,_|_| |_|\\___\\___|_____|\\__|\t\t*\n"
+           "*\t                                              \t\t*\n"
+           "*\t                                              \t\t*\n");
+    printBar();
+    printf("*\t %-55s*\n", "MAIN MENU");
+    printSide();
+    printf("*\t %-55s*\n", "Enter a number to select an action:");
+    printSide();
+    printf("*\t %-55s*\n", "1 - Play Single Player vs AI");
+    printf("*\t %-55s*\n", "2 - Play 2-Player on the same computer");
+    printf("*\t %-55s*\n", "3 - Play Single Player vs Network Opponent");
+    printf("*\t %-55s*\n", "4 - Play AI vs Network Opponent");
+    printf("*\t %-55s*\n", "5 - View High Scores");
+    printf("*\t %-55s*\n", "6 - Exit Game");
+    printSide();
+    printSide();
+    printf("*\t %-55s*\n", "Legend");
+    printf("*\t %-48s*\n", "[Y]-roll again.\t[N]-end the round.");
+    printf("*\t %-54s*\n", "[P]-view probability.\t[Q]- quit game)");
+    printSide();
+    printBar();
 
     return getInt("\n");
 }
@@ -35,9 +53,13 @@ int amtRounds(){
     int rounds = 0;
 
     while (rounds < 1 || rounds > 20) {
-        printf("-----------------------------------------------------------\n");
-        printf("Enter the number of rounds (20 is the max):\n");
-        rounds = getInt("-----------------------------------------------------------\n");
+        printBar();
+        printSide();
+        printf("*\t %-55s*\n", "Enter the number of rounds (20 is the max):");
+//        printf("\tEnter the number of rounds (20 is the max):\n\n");
+        printSide();
+        printBar();
+        rounds = getInt("");
     }
 
     return rounds;
@@ -54,9 +76,12 @@ void displayPlayer(Player* player){
 //added -- displays round number
 void startRound(Game* game) {
 
-    printf("-----------------------------------------------------------\n");
-    printf("START, Round %d of %d (Q to quit)\n", game->roundNumber, game->totalRounds);
-    printf("-----------------------------------------------------------\n");
+    printBar();
+    printSide();
+    printf("*\t START, Round %2d of %-2d (Q to Quit) %21s*\n", game->roundNumber, game->totalRounds, "");
+    printSide();
+    printBar();
+    printf("\n");
 }
 
 // added Determines first player
@@ -67,14 +92,6 @@ void firstPlayer(Player* currentPlayer, Player* otherPlayer){
 }
 
 
-//
-//    if(player_roll > opponent_roll){
-//        printf("You rolled %d. Opponent rolled %d. You go first!\n", player_roll, opponent_roll);
-//    } else {
-//        printf("You rolled %d. Opponent rolled %d. Opponent goes first!\n", player_roll, opponent_roll);
-//    }
-//}
-
 // Needs to be added to humanplayer.c
 
 //void displayProbability(Player* player, int probability){
@@ -84,15 +101,19 @@ void firstPlayer(Player* currentPlayer, Player* otherPlayer){
 
 //added -- lose rounds message
 void loseRound(Player* player){
+    printf("%s rolled %d. \tRound Score: %d.\n", player->name, player->lastRoll, player->roundScore);
     printf("\nTurn over! \nYou rolled your 'First Roll': %d.\n", player->point);
 }
 //added displays round over game summary for current player
 void roundOver(Player* player){
 
-    printf("\n\n===== Round Summary =====\n\n");
-    printf("%s: Total round score = %d\n", player->name, player->roundScore);
-    printf("%s: Total game score = %d\n\n", player->name, player->totalScore);
-    printf("==========================\n\n");
+
+    printf("\n\n\t _________________Round Summary__________________\n");
+    printf("\t| %-46s|\n", "");
+    printf("\t|     %12s Total Round Score = %-4d     |\n", player->name, player->roundScore);
+    printf("\t|     %12s Total Game Score = %-4d      |\n", player->name, player->totalScore);
+    printf("\t| %-46s|\n", "");
+    printf("\t|_______________________________________________|\n\n\n");
 }
 
 //added -- displays player name, last roll, and updated round score
@@ -103,7 +124,7 @@ void roundScore(Player* player){
 
 // MUST ADD: Add in playRound
 void pointSet(Player* player){
-    printf("Player %s - Point set: %d.\n", player->name, player->point);
+    printf("%s rolled %d. \tPoint Set: %d.\n", player->name, player->point, player->point);
 }
 
 /// Added to humanplayer.c
@@ -147,14 +168,14 @@ void gameSummary(Player* p1, Player* p2){
 
 // **Not added yet
 void highScore(){
-    printf("-----------------------------------------------------------\n");
+    printBar();
     printf("Congratulations, you have a high score!\nPlease enter your name: \n");
-    printf("-----------------------------------------------------------\n");
+    printBar();
+    char* input = getInput(" ");
 }
 // ** Not added
 bool playAgain(){
 
-//    printf("Would you like to play another game? (Y/n)\n");
     char* input = getInput("Would you like to play another game? (Y/n): ");
 
     if(input[0] == 'y' || input[0] == 'Y') return true;
@@ -169,3 +190,26 @@ void leadingRound(Player* winner, Player* loser){
            winner->lastRoll, winner->roundScore, lead);
 }
 
+void highScoreTable(Score* scores){
+    printf("\n\n");
+    printBar();
+    printSide();
+    printf("*     _    _ _       _        _____                         \t*\n"
+           "*    | |  | (_)     | |      / ____|                        \t*\n"
+           "*    | |__| |_  __ _| |__   | (___   ___ ___  _ __ ___  ___ \t*\n"
+           "*    |  __  | |/ _` | '_ \\   \\___ \\ / __/ _ \\| '__/ _ \\/ __|\t*\n"
+           "*    | |  | | | (_| | | | |  ____) | (_| (_) | | |  __/\\__ \\\t*\n"
+           "*    |_|  |_|_|\\__, |_| |_| |_____/ \\___\\___/|_|  \\___||___/\t*\n"
+           "*               __/ |                                       \t*\n"
+           "*              |___/                                        \t*\n");
+    printSide();
+    printBar();
+    printSide();
+
+    //Just for fun Edit later
+    printf("*\t %-4s\t%-28s %-5s  %-11s *\n", "Rank", "Name", "Score", "Date");
+    printSide();
+    printf("*\t %-4s\t%-28s %-5s  %-11s *\n", "1:", "asdf", "klll", "asbbcc");
+    printf("*\t %-4s\t%-28s %-5s  %-11s *\n", "10:", "asdf", "klll", "asbbcc");
+
+}

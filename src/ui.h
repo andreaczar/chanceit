@@ -111,3 +111,4 @@ bool playAgain();
  * Postcondition: Displays a prompt asking if you want to play again.
  */
 void leadingRound(Player* winner, Player* loser);
+void highScoreTable();

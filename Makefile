@@ -2,9 +2,9 @@ BUILDDIR=./build
 BINDIR=./bin
 SRCDIR=./src
 
-chanceit:	player controller roll prob ui input game humanplayer aiplayer
+chanceit:	player controller roll prob ui input game humanplayer aiplayer highscore
 	mkdir -p $(BINDIR)
-	gcc -o $(BINDIR)/chanceit $(BUILDDIR)/roll.o $(BUILDDIR)/prob.o $(BUILDDIR)/player.o $(BUILDDIR)/ui.o $(BUILDDIR)/controller.o $(BUILDDIR)/input.o $(BUILDDIR)/game.o $(BUILDDIR)/humanplayer.o $(BUILDDIR)/aiplayer.o
+	gcc -o $(BINDIR)/chanceit $(BUILDDIR)/roll.o $(BUILDDIR)/prob.o $(BUILDDIR)/player.o $(BUILDDIR)/ui.o $(BUILDDIR)/controller.o $(BUILDDIR)/input.o $(BUILDDIR)/game.o $(BUILDDIR)/humanplayer.o $(BUILDDIR)/aiplayer.o $(BUILDDIR)/highscore.o
 
 controller:	$(SRCDIR)/roll.h $(SRCDIR)/ui.h $(SRCDIR)/prob.h
 	mkdir -p $(BUILDDIR)
@@ -33,6 +33,9 @@ humanplayer: $(SRCDIR)/game.h $(SRCDIR)/humanplayer.c $(SRCDIR)/humanplayer.h
 
 aiplayer: $(SRCDIR)/game.h $(SRCDIR)/humanplayer.c $(SRCDIR)/aiplayer.h
 	gcc -c $(SRCDIR)/aiplayer.c -o $(BUILDDIR)/aiplayer.o
+
+highscore: $(SRCDIR)/highscore.h $(SRCDIR)/ui.h
+	gcc -c $(SRCDIR)/highscore.c -o $(BUILDDIR)/highscore.o
 
 clean:
 	rm -rf $(BUILDDIR)/*

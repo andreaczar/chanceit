@@ -8,6 +8,7 @@
 #include "prob.h"
 #include "roll.h"
 #include "input.h"
+#include "highscore.h"
 
 // switch player
 void switchPlayer(Player** currentPlayer, Player** otherPlayer, Player** p1, Player** p2){
@@ -23,7 +24,6 @@ void switchPlayer(Player** currentPlayer, Player** otherPlayer, Player** p1, Pla
 /**
  * Play the game (all rounds) for the players tha were setup
  * Return the winning player.
-
  */
 
 void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
@@ -56,6 +56,7 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
         yourPlayer->lastRoll = roll(2);
 
         if(yourPlayer->lastRoll == yourPlayer->point){
+
             //print round reset and lost
             yourPlayer->roundScore = 0;
             loseRound(yourPlayer);
@@ -65,6 +66,7 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
             yourPlayer->roundScore += yourPlayer->point;
 
             yourPlayer->roundScore += yourPlayer->lastRoll;
+
             // print current round info
             roundScore(yourPlayer);
         }
@@ -164,6 +166,15 @@ int main() {
     bool quitRound = false;
     bool again;
 
+    initHighscores();
+    displayHighscore();
+    highScoreTable();
+    addHighscore(23, "Andrea");
+
+    printf("\n\nNew scores\n\n");
+
+    displayHighscore();
+
     // create a new game
     Game *game;
     game = malloc(sizeof(Game));
@@ -205,7 +216,10 @@ int main() {
             printf("AI vs Network\n");
             break;
         case 5:
-            printf("High score table\n");
+            highScoreTable();
+            break;
+        case 6:
+            printf("Thanks for playing. Goodbye.\n");
             break;
         default:
             printf("INVALID INPUT!");
