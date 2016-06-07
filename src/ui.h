@@ -112,3 +112,5 @@ bool playAgain();
  */
 void leadingRound(Player* winner, Player* loser);
 void highScoreTable();
+void gameOver();
+void displayProbability(Player* player, double probability);
