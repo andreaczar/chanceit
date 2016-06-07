@@ -147,6 +147,10 @@ void displayHighscores() {
 
     free(scores);
 
+    printf("Press any key to return to the Main Menu.");
+    getchar();
+
+
 }
 
 bool isHighscore(int score){
