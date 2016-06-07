@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "roll.h"
 #include "ui.h"
+#include "prob.h"
 /*
  * Play the human turn.
  *
@@ -26,6 +27,8 @@ bool playHumanTurn(Game *game, Player* yourPlayer, Player* opponent){
             return false;
         } else if(response == 'p') {
             //show probability
+            double p = prob(yourPlayer);
+            displayProbability(yourPlayer, p);
 
         }
     }
