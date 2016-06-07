@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
+
 
 #include "highscore.h"
 #include "ui.h"
@@ -78,12 +80,29 @@ Score* readHighscores() {
 
 }
 
-void writeHighscores(Score *scores) {
+int compareScores(const void *a, const void *b){
+
+    // cast pointers to dynamic types to pointers to Score structs
+    Score* score1 = (Score*)a;
+    Score* score2 = (Score*)b;
+
+    if(score1->score < score2->score){
+        return 1;
+    } else if(score1->score > score2->score){
+        return -1;
+    } else {
+        return 0;
+    }
+}
+
+
+void writeHighscores(Score* scores) {
 
     int i;
     FILE * fp;
 
     //sort scores
+    qsort(scores, NUM_SCORES, sizeof(Score), compareScores);
 
     fp = fopen (HSFILENAME, "w+");
 
@@ -118,32 +137,47 @@ void initHighscores(){
     free(initialScores);
 }
 
-void displayHighscore() {
+void displayHighscores() {
 
     Score* scores;
 
     scores = readHighscores();
 
-    int i;
-
-    for(i=0; i<NUM_SCORES; i++){
-        printf("score: %d, user: %s, Date: %s\n", scores[i].score, scores[i].name, scores[i].date);
-    }
+    highScoreTable(scores);
 
     free(scores);
 
 }
 
+bool isHighscore(int score){
+    Score* scores;
+    scores = readHighscores();
+
+    if(score >= scores[9].score){
+        return true;
+    }
+    return false;
+}
 
 
 void addHighscore(int score, char *name) {
+
+    char dateString[12];
+    struct tm *info;
+    time_t rawtime;
+
+    time(&rawtime);
+    info = localtime(&rawtime);
+
+    strftime(dateString, 12, "%b/%d/%Y", info);
 
     Score* scores;
     scores = readHighscores();
 
     scores[9].score = score;
     scores[9].name = name;
-    scores[9].date = "JUN/06/2016";
+    scores[9].date = dateString;
+//    scores[9].date = "JUN/06/2016";
 
     writeHighscores(scores);
 
