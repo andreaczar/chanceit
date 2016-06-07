@@ -141,17 +141,23 @@ void playGame(Game* game, Player* p1, Player* p2){
     }
 
 
-    // print game over, determine and show winner
-    printf("GAME OVER!\n");
+    gameOver();
+//    displayMenu();
 
 //    gameSummary(p1, p2);
 
     if(p1->totalScore > p2->totalScore) {
         win(p1);
+        if(isHighscore(p1->totalScore)){
+            addHighscore(p1->totalScore, p1->name);
+        }
     } else if (p1->totalScore == p2->totalScore){
         printf("It's a tie!");
     }else{
         win(p2);
+        if(isHighscore(p2->totalScore)){
+            addHighscore(p2->totalScore, p2->name);
+        }
     }
 
     return;
@@ -167,13 +173,6 @@ int main() {
     bool again;
 
     initHighscores();
-    displayHighscore();
-    highScoreTable();
-    addHighscore(23, "Andrea");
-
-    printf("\n\nNew scores\n\n");
-
-    displayHighscore();
 
     // create a new game
     Game *game;
@@ -191,8 +190,8 @@ int main() {
             game->totalRounds = amtRounds();
             game->roundNumber = 1;
 
-            p1 = getHumanPlayer("Player 1");
-            p2 = getAIPlayer("AI Player 2");
+            p1 = getHumanPlayer("George");
+            p2 = getAIPlayer("AI Bob");
 
             playGame(game, p1, p2);
 
@@ -202,8 +201,8 @@ int main() {
             game->totalRounds = amtRounds();
             game->roundNumber = 1;
 
-            p1 = getHumanPlayer("Player 1");
-            p2 = getHumanPlayer("Player 2");
+            p1 = getHumanPlayer("George");
+            p2 = getHumanPlayer("Alice");
 
             playGame(game, p1, p2);
 
@@ -216,13 +215,14 @@ int main() {
             printf("AI vs Network\n");
             break;
         case 5:
-            highScoreTable();
+            displayHighscores();
+            //return to main menu
             break;
         case 6:
             printf("Thanks for playing. Goodbye.\n");
             break;
         default:
-            printf("INVALID INPUT!");
+            printf("Invalid Input! Enter a number: 1-6\n");
 
     }
 
