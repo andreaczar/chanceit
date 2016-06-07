@@ -182,48 +182,50 @@ int main() {
     Player *p1;
     Player *p2;
 
-    playMode = displayMenu();
 
-    switch (playMode) {
-        case 1:
+    while(1) {
+        playMode = displayMenu();
 
-            game->totalRounds = amtRounds();
-            game->roundNumber = 1;
+        switch (playMode) {
+            case 1:
 
-            p1 = getHumanPlayer("George");
-            p2 = getAIPlayer("AI Bob");
+                game->totalRounds = amtRounds();
+                game->roundNumber = 1;
 
-            playGame(game, p1, p2);
+                p1 = getHumanPlayer("George");
+                p2 = getAIPlayer("AI Bob");
 
-            break;
+                playGame(game, p1, p2);
 
-        case 2:
-            game->totalRounds = amtRounds();
-            game->roundNumber = 1;
+                break;
 
-            p1 = getHumanPlayer("George");
-            p2 = getHumanPlayer("Alice");
+            case 2:
+                game->totalRounds = amtRounds();
+                game->roundNumber = 1;
 
-            playGame(game, p1, p2);
+                p1 = getHumanPlayer("George");
+                p2 = getHumanPlayer("Alice");
 
-            break;
+                playGame(game, p1, p2);
 
-        case 3:
-            printf("Player vs Network\n");
-            break;
-        case 4:
-            printf("AI vs Network\n");
-            break;
-        case 5:
-            displayHighscores();
-            //return to main menu
-            break;
-        case 6:
-            printf("Thanks for playing. Goodbye.\n");
-            break;
-        default:
-            printf("Invalid Input! Enter a number: 1-6\n");
+                break;
 
+            case 3:
+                printf("Player vs Network\n");
+                break;
+            case 4:
+                printf("AI vs Network\n");
+                break;
+            case 5:
+                displayHighscores();
+
+                break;
+            case 6:
+                printf("Thanks for playing. Goodbye.\n");
+                exit(0);
+            default:
+                printf("Invalid Input! Enter a number: 1-6\n");
+
+        }
     }
-
 }
