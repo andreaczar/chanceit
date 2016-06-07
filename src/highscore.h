@@ -1,4 +1,4 @@
-
+#include <stdbool.h>
 
 typedef struct{
     int score;
@@ -6,8 +6,10 @@ typedef struct{
     char* name;
 } Score;
 
-void displayHighscore();
+void displayHighscores();
 
 void addHighscore(int score, char* name);
 
 void initHighscores();
+
+bool isHighscore(int score);
