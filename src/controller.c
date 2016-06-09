@@ -35,7 +35,7 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
     playerRoll = roll(2);
     yourPlayer->point = playerRoll;
     yourPlayer->rollCount = 0;
-    yourPlayer->roundScore = 0;
+    yourPlayer->roundScore = yourPlayer->point;
 
     displayPlayer(yourPlayer);
 
@@ -55,15 +55,15 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
 
         yourPlayer->lastRoll = roll(2);
 
-        if(yourPlayer->lastRoll == yourPlayer->point){
+        if(yourPlayer->lastRoll == yourPlayer->point) {
 
             //print round reset and lost
             yourPlayer->roundScore = 0;
             loseRound(yourPlayer);
 
             break;
+
         } else {
-            yourPlayer->roundScore += yourPlayer->point;
 
             yourPlayer->roundScore += yourPlayer->lastRoll;
 
@@ -84,6 +84,8 @@ void playGame(Game* game, Player* p1, Player* p2){
 
     time_t t;
     srand((unsigned) time(&t));
+
+
 
     Player* currentPlayer;
     Player* otherPlayer;
@@ -189,10 +191,13 @@ int main() {
         switch (playMode) {
             case 1:
 
+
+
+
                 game->totalRounds = amtRounds();
                 game->roundNumber = 1;
 
-                p1 = getHumanPlayer("George");
+                p1 = getHumanPlayer("Andrea");
                 p2 = getAIPlayer("AI Bob");
 
                 playGame(game, p1, p2);
@@ -203,8 +208,8 @@ int main() {
                 game->totalRounds = amtRounds();
                 game->roundNumber = 1;
 
-                p1 = getHumanPlayer("George");
-                p2 = getHumanPlayer("Alice");
+                p1 = getHumanPlayer("Russ");
+                p2 = getHumanPlayer("Andrea");
 
                 playGame(game, p1, p2);
 
