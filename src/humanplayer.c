@@ -1,5 +1,5 @@
-#include <stdbool.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "roll.h"
 #include "ui.h"
 #include "prob.h"
