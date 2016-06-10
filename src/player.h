@@ -21,6 +21,7 @@ struct gamePlayer {
     int lastRoll;
     int rollCount;
     char* name;
+    bool firstTurn;
 };
 
 
