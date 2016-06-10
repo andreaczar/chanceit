@@ -166,6 +166,7 @@ bool isHighscore(int score){
 
 void addHighscore(int score, char *name) {
 
+
     char dateString[12];
     struct tm *info;
     time_t rawtime;
@@ -181,7 +182,6 @@ void addHighscore(int score, char *name) {
     scores[9].score = score;
     scores[9].name = name;
     scores[9].date = dateString;
-//    scores[9].date = "JUN/06/2016";
 
     writeHighscores(scores);
 

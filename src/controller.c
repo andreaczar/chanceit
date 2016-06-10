@@ -9,6 +9,9 @@
 #include "roll.h"
 #include "input.h"
 #include "highscore.h"
+#include "socket.h"
+#include "protocol.h"
+
 
 // switch player
 void switchPlayer(Player** currentPlayer, Player** otherPlayer, Player** p1, Player** p2){
@@ -172,6 +175,8 @@ int main() {
     int totalScore = 0;
     bool quitRound = false;
     bool again;
+    char *IP = "52.38.98.137";
+    int port = 1099;
 
     initHighscores();
 
@@ -221,6 +226,18 @@ int main() {
 
             case 3:
                 printf("Player vs Network\n");
+
+
+                int connect = serverConnect (*IP, port);
+
+                if(connect == 1){
+                    printf("Error connecting\n");
+                } else {
+                    printf("Connection made\n");
+                }
+
+
+
                 break;
             case 4:
                 printf("AI vs Network\n");

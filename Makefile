@@ -2,11 +2,11 @@ BUILDDIR=./build
 BINDIR=./bin
 SRCDIR=./src
 
-chanceit:	player controller roll prob ui input game humanplayer aiplayer highscore
+chanceit:	player controller roll prob ui input game humanplayer aiplayer highscore socket protocol
 	mkdir -p $(BINDIR)
-	gcc -o $(BINDIR)/chanceit $(BUILDDIR)/roll.o $(BUILDDIR)/prob.o $(BUILDDIR)/player.o $(BUILDDIR)/ui.o $(BUILDDIR)/controller.o $(BUILDDIR)/input.o $(BUILDDIR)/game.o $(BUILDDIR)/humanplayer.o $(BUILDDIR)/aiplayer.o $(BUILDDIR)/highscore.o
+	gcc -o $(BINDIR)/chanceit $(BUILDDIR)/roll.o $(BUILDDIR)/prob.o $(BUILDDIR)/player.o $(BUILDDIR)/ui.o $(BUILDDIR)/controller.o $(BUILDDIR)/input.o $(BUILDDIR)/game.o $(BUILDDIR)/humanplayer.o $(BUILDDIR)/aiplayer.o $(BUILDDIR)/highscore.o $(BUILDDIR)/socket.o $(BUILDDIR)/protocol.o
 
-controller:	$(SRCDIR)/roll.h $(SRCDIR)/ui.h $(SRCDIR)/prob.h
+controller:	$(SRCDIR)/roll.h $(SRCDIR)/ui.h $(SRCDIR)/prob.h $(SRCDIR)/socket.h
 	mkdir -p $(BUILDDIR)
 	gcc -c $(SRCDIR)/controller.c -o $(BUILDDIR)/controller.o
 
@@ -36,6 +36,12 @@ aiplayer: $(SRCDIR)/game.h $(SRCDIR)/humanplayer.c $(SRCDIR)/aiplayer.h
 
 highscore: $(SRCDIR)/highscore.h $(SRCDIR)/ui.h
 	gcc -c $(SRCDIR)/highscore.c -o $(BUILDDIR)/highscore.o
+
+protocol: $(SRCDIR)/protocol.h
+	gcc -c $(SRCDIR)/protocol.c -o $(BUILDDIR)/protocol.o
+
+socket: $(SRCDIR)/socket.h $(SRCDIR)/protocol.h
+	gcc -c $(SRCDIR)/socket.c -o $(BUILDDIR)/socket.o
 
 clean:
 	rm -rf $(BUILDDIR)/*
