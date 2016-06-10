@@ -29,12 +29,13 @@ int serverConnect (char *IP, int port){
     }
 
     puts("Socket created\n");
+
     server.sin_addr.s_addr = inet_addr(&IP);
     server.sin_family = AF_INET;
-    server.sin_port = htons( port );
+    server.sin_port = htons(port);
  
     //Connect to remote server
-    if (connect(socket_desc , (struct sockaddr *)&server , sizeof(server)) < 0){
+    if (connect(socket_desc, (struct sockaddr *)&server , sizeof(server)) < 0){
         puts("connect error");
         return 1;
     }
@@ -47,6 +48,7 @@ int serverConnect (char *IP, int port){
 int server_send(char * msg){
 
 	if(send(socket_desc, msg, strlen(msg), 0) < 0){
+        printf("msg received");
 		return 0; 
 	}
 	return 1;

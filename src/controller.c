@@ -175,8 +175,11 @@ int main() {
     int totalScore = 0;
     bool quitRound = false;
     bool again;
+
+    //connection stuff
     char *IP = "52.38.98.137";
     int port = 1099;
+    char *msg;
 
     initHighscores();
 
@@ -227,8 +230,11 @@ int main() {
             case 3:
                 printf("Player vs Network\n");
 
-
                 int connect = serverConnect (*IP, port);
+
+                //msg = getInput("Enter your name: ");
+                msg = "HELLO:BOB\n";
+                server_send(msg);
 
                 if(connect == 1){
                     printf("Error connecting\n");
