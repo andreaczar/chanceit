@@ -44,12 +44,6 @@ void firstPlayer(Player* currentPlayer, Player* otherPlayer);
 
 /**
  * Precondition: N/A
- * Postcondition: Displays the probability of rolling your initial roll based on your current roll.
- */
-//void displayProbability(Player* player, int probability);
-
-/**
- * Precondition: N/A
  * Postcondition: Displays a message saying you've rolled the initial roll.
  */
 void loseRound();
@@ -72,6 +66,8 @@ void roundScore(Player* player);
  * Postcondition: Displays the first roll.
  */
 void pointSet(Player* player);
+
+char* getPlayerName();
 
 /**
  * Precondition: N/A
