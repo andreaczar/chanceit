@@ -34,7 +34,7 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
     // set the point and initialize round variables
     playerRoll = roll(2);
     yourPlayer->point = playerRoll;
-    yourPlayer->rollCount = 0;
+    yourPlayer->rollCount = 1;
     yourPlayer->roundScore = yourPlayer->point;
 
     displayPlayer(yourPlayer);

@@ -4,6 +4,7 @@
 #include "ui.h"
 #include "input.h"
 #include "highscore.h"
+#include <unistd.h>
 
 void printBar(){
     printf("*****************************************************************\n");
@@ -102,6 +103,7 @@ void displayProbability(Player* player, double probability){
 void loseRound(Player* player){
     printf("%s rolled %2d.  Round Score: %d.\n", player->name, player->lastRoll, player->roundScore);
     printf("\nTurn over! \nYou rolled your 'First Roll': %d.\n", player->point);
+	sleep(4);
 }
 //added displays round over game summary for current player
 void roundOver(Player* player){
