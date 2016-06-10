@@ -1,5 +1,5 @@
-#include "stdlib.h"
-
+#include <stdlib.h>
+#include <stdbool.h>
 #include "player.h"
 #include "humanplayer.h"
 #include "aiplayer.h"
@@ -17,6 +17,7 @@ Player* initPlayer(char* name){
     player->lastRoll = 0;
     player->rollCount = 0;
     player->name = name;
+    player->firstTurn = false;
     return player;
 }
 
