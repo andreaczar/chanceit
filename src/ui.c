@@ -55,31 +55,20 @@ int amtRounds(){
         printBar();
         printSide();
         printf("*\t %-55s*\n", "Enter the number of rounds (20 is the max):");
-//        printf("\tEnter the number of rounds (20 is the max):\n\n");
         printSide();
         printBar();
         rounds = getInt("");
     }
-
     return rounds;
 }
 // Added -- Displays the start of the game and the number of rounds in the game
 void startGame(Game *game){
     printf("\nInitializing Game:  %d Rounds.\n\n", game->totalRounds);
 }
+
 // added -- Displays player name
 void displayPlayer(Player* player){
-
-//    printf("\t|     %-12s\t Total Score = %-4d     |\n", p1->name, p1->totalScore);
-
-
-//    printf("\t************************************************\n");
-//    printf("\t*%-46s*\n", "");
     printf("\t\t   %12s's Round\t\t       \n\n", player->name);
-//    printf("\t*%-46s*\n", "");
-
-//    printf("\t|\t%s's round\n", player->name);
-//    printf("\t************************************************\n\n");
 }
 
 //added -- displays round number
@@ -111,7 +100,7 @@ void displayProbability(Player* player, double probability){
 
 //added -- lose rounds message
 void loseRound(Player* player){
-    printf("%s rolled %d. \tRound Score: %d.\n", player->name, player->lastRoll, player->roundScore);
+    printf("%s rolled %2d.  Round Score: %d.\n", player->name, player->lastRoll, player->roundScore);
     printf("\nTurn over! \nYou rolled your 'First Roll': %d.\n", player->point);
 }
 //added displays round over game summary for current player
@@ -129,13 +118,13 @@ void roundOver(Player* player){
 
 //added -- displays player name, last roll, and updated round score
 void roundScore(Player* player){
-    printf("%s rolled %d. \tRound Score: %d.\n", player->name, player->lastRoll, player->roundScore);
+    printf("%s rolled %2d.  Round Score: %d.\n", player->name, player->lastRoll, player->roundScore);
 }
 
 
 // MUST ADD: Add in playRound
 void pointSet(Player* player){
-    printf("%s rolled %d. \tPoint Set: %d.\n", player->name, player->point, player->point);
+    printf("%s rolled %2d.  Point Set: %d.\n", player->name, player->point, player->point);
 }
 
 /// Added to humanplayer.c
@@ -143,10 +132,7 @@ char rollAgain(){
 
     while(1){
 
-
-        printf("Roll again? (Y/N/P/Q)\n");
-
-        char* input = getInput(" ");
+        char* input = getInput("Roll again? (Y/N/P/Q)\n");
 
         char firstChar = input[0];
 
@@ -165,6 +151,7 @@ char rollAgain(){
 }
 //added -- Displays the winner
 void win(Player* player){
+
     printf("Congratulations!! %s, you WON with %d points!\n\n", player->name, player->totalScore);
 }
 // added -- displays score for both players at the end of the game
@@ -177,13 +164,15 @@ void gameSummary(Player* p1, Player* p2){
     printf("\t|_______________________________________________|\n\n\n");
     }
 
-// **Not added yet
-void highScore(){
-    printBar();
-    printf("Congratulations, you have a high score!\nPlease enter your name: \n");
-    printBar();
-    char* input = getInput(" ");
+// Get player names
+char* getPlayerName(){
+
+    char* nameInput = getInput("\nPlayer enter your name: ");
+    printf("\n");
+
+    return nameInput;
 }
+
 // ** Not added
 bool playAgain(){
 
@@ -192,6 +181,7 @@ bool playAgain(){
     if(input[0] == 'y' || input[0] == 'Y') return true;
     else if(input[0] == 'n' || input[0] == 'N') return false;
 }
+
 
 /// *** NOT ADDED
 void leadingRound(Player* winner, Player* loser){
@@ -228,6 +218,11 @@ void highScoreTable(Score* scores){
     printSide();
     printBar();
 }
+
+void highScore(){
+    printf("You have a high score!\n");
+}
+
 
 void gameOver() {
     printf("\n\t  __                       __                \n"
