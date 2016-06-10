@@ -105,14 +105,17 @@ void playGame(Game* game, Player* p1, Player* p2){
     p1->lastRoll = p1Roll;
     p2->lastRoll = p2Roll;
 
-    // determine current player and other player
+    // determine current player(player 1) and other player(player 2)
+    // set first turn to true for player who rolled highest
     if (p1Roll > p2Roll) {
         currentPlayer = p1;
         otherPlayer = p2;
+        p1->firstTurn = true;
 
     } else {
         currentPlayer = p2;
         otherPlayer = p1;
+        p2->firstTurn = true;
     }
 
     //print game start (who's going first)
@@ -135,22 +138,17 @@ void playGame(Game* game, Player* p1, Player* p2){
 
         switchPlayer(&currentPlayer, &otherPlayer, &p1, &p2);
 
-
-        //print current round over
-
         // go to next turn
         game->roundNumber++;
     }
 
-
     gameOver();
-//    displayMenu();
-
-//    gameSummary(p1, p2);
 
     if(p1->totalScore > p2->totalScore) {
         win(p1);
+
         if(isHighscore(p1->totalScore)){
+            highScore();
             addHighscore(p1->totalScore, p1->name);
         }
     } else if (p1->totalScore == p2->totalScore){
@@ -158,6 +156,7 @@ void playGame(Game* game, Player* p1, Player* p2){
     }else{
         win(p2);
         if(isHighscore(p2->totalScore)){
+            highScore();
             addHighscore(p2->totalScore, p2->name);
         }
     }
@@ -184,6 +183,8 @@ int main() {
     Player *p1;
     Player *p2;
 
+    char* name;
+    char* name2;
 
     while(1) {
         playMode = displayMenu();
@@ -191,13 +192,12 @@ int main() {
         switch (playMode) {
             case 1:
 
-
-
+                name = getPlayerName();
 
                 game->totalRounds = amtRounds();
                 game->roundNumber = 1;
 
-                p1 = getHumanPlayer("Andrea");
+                p1 = getHumanPlayer(name);
                 p2 = getAIPlayer("AI Bob");
 
                 playGame(game, p1, p2);
@@ -205,11 +205,15 @@ int main() {
                 break;
 
             case 2:
+
+                name = getPlayerName();
+                name2 = getPlayerName();
+
                 game->totalRounds = amtRounds();
                 game->roundNumber = 1;
 
-                p1 = getHumanPlayer("Russ");
-                p2 = getHumanPlayer("Andrea");
+                p1 = getHumanPlayer(name);
+                p2 = getHumanPlayer(name2);
 
                 playGame(game, p1, p2);
 
