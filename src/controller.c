@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <stdbool.h>
-#include <ctype.h>
+#include <sys/types.h>
+#include <netinet/in.h>
+#include <time.h>
 
 #include "ui.h"
-#include "prob.h"
 #include "roll.h"
-#include "input.h"
 #include "highscore.h"
 #include "socket.h"
 #include "protocol.h"
@@ -168,18 +167,53 @@ void playGame(Game* game, Player* p1, Player* p2){
 }
 
 
+void playNetworkGame(Game* game, Player* p1, Player* p2){
+    int p1Roll, p2Roll;
+    Player* currentPlayer;
+    Player* otherPlayer;
+
+    startGame(game);
+    getInitialRolls(&p1Roll, &p2Roll);
+
+
+    p1->lastRoll = p1Roll;
+    p2->lastRoll = p2Roll;
+
+    // determine current player(player 1) and other player(player 2)
+    // set first turn to true for player who rolled highest
+    if (p1Roll > p2Roll) {
+        currentPlayer = p1;
+        otherPlayer = p2;
+        p1->firstTurn = true;
+
+    } else {
+        currentPlayer = p2;
+        otherPlayer = p1;
+        p2->firstTurn = true;
+    }
+
+    firstPlayer(currentPlayer, otherPlayer);
+
+    int p1Score, p2Score;
+
+    getTurnStart(&p1Score, &p2Score);
+
+    printf("P1 Score: %d\n", p1Score);
+    printf("P2 Score: %d\n", p2Score);
+
+
+    exit(0);
+}
+
+
 int main() {
     int playMode, playerRoll, opponentRoll, turnPlayer, turnOpponent, initialRoll;
-    int lastRoll = 0;
-    int scoreRound = 0;
-    int totalScore = 0;
-    bool quitRound = false;
-    bool again;
 
     //connection stuff
     char *IP = "52.38.98.137";
     int port = 1099;
     char *msg;
+    struct sockaddr_in server;
 
     initHighscores();
 
@@ -228,33 +262,38 @@ int main() {
                 break;
 
             case 3:
+                game->totalRounds = 20;
+                game->roundNumber = 1;
+
                 printf("Player vs Network\n");
-
-                int connect = serverConnect (*IP, port);
-
-                //msg = getInput("Enter your name: ");
-                msg = "HELLO:BOB\n";
-                server_send(msg);
-
-                if(connect == 1){
-                    printf("Error connecting\n");
-                } else {
-                    printf("Connection made\n");
-                }
+                name = getPlayerName();
+                p1 = getHumanPlayer(name);
+                printf("Got human player\n");
 
 
+                serverConnect(IP, port);
+
+                connectPlayer(name);
+
+                char* opponent;
+                getOpponent(&opponent);
+                p2 = getRemotePlayer(opponent);
+
+                playNetworkGame(game, p1, p2);
 
                 break;
             case 4:
                 printf("AI vs Network\n");
                 break;
+
             case 5:
                 displayHighscores();
-
                 break;
+
             case 6:
                 printf("Thanks for playing. Goodbye.\n");
                 exit(0);
+
             default:
                 printf("Invalid Input! Enter a number: 1-6\n");
 

@@ -1,4 +1,14 @@
 
+typedef struct {
+    int roundScore;
+    int gameScore;
+    int roundNumber;
+    int roll;
+} TurnInfo;
 
-int getOpponent(char *opp);
-int isGameOver (char *response);
+
+int connectPlayer(char* name);
+int getOpponent(char** opponent);
+int isGameOver (char* response);
+int getInitialRolls(int *p1, int *p2);
+int getTurnStart(int *p1Score, int *p2Score);

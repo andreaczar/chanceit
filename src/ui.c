@@ -176,16 +176,16 @@ char* getPlayerName(){
 }
 
 // ** Not added
-bool playAgain(){
+bool playAgain() {
 
-    char* input = getInput("Would you like to play another game? (Y/n): ");
+    char *input = getInput("Would you like to play another game? (Y/n): ");
 
-    if(input[0] == 'y' || input[0] == 'Y') return true;
-    else if(input[0] == 'n' || input[0] == 'N') return false;
+    if (input[0] == 'y' || input[0] == 'Y') return true;
+    else if (input[0] == 'n' || input[0] == 'N') return false;
+    return false;
+
+
 }
-
-
-/// *** NOT ADDED
 void leadingRound(Player* winner, Player* loser){
     int lead = winner->roundScore + winner->totalScore - loser->roundScore - loser->totalScore;
 

@@ -38,3 +38,10 @@ Player* getAIPlayer(char* name){
     player->playTurn = playAITurn;
     return player;
 }
+
+
+Player* getRemotePlayer(char* name){
+    Player* player = initPlayer(name);
+    player->playTurn = NULL;
+    return player;
+}

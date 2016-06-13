@@ -47,3 +47,6 @@ Player* getNetworkPlayer(char* name);
  * Return: An AI player
  */
 Player* getAIPlayer(char* name);
+
+
+Player* getRemotePlayer(char* name);

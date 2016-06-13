@@ -30,7 +30,7 @@ Score* readHighscores() {
 
     if (!fp) {
         fprintf(stderr, "Failed to open file for reading\n");
-        return;
+        return scores;
     }
 
     scores = malloc(NUM_SCORES * sizeof(Score));

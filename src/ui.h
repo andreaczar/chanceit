@@ -55,7 +55,6 @@ void loseRound();
 void roundOver();
 
 /**
-/**
  * Precondition: N/A
  * Postcondition: Displays what the user has rolled along with their round score.
  */
