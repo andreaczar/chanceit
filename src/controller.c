@@ -39,9 +39,8 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
     yourPlayer->rollCount = 1;
     yourPlayer->roundScore = yourPlayer->point;
 
-    displayPlayer(yourPlayer);
+    displayPlayer(yourPlayer, otherPlayer);
 
-//    printf("Player %s - point set: %d\n", yourPlayer->name, yourPlayer->point);
     pointSet(yourPlayer);
 
     while(true){
@@ -127,7 +126,6 @@ void playGame(Game* game, Player* p1, Player* p2){
 
         // print current round start
         startRound(game);
-
         // player the first players round
         playRound(game, currentPlayer, otherPlayer);
         switchPlayer(&currentPlayer, &otherPlayer, &p1, &p2);
@@ -136,14 +134,14 @@ void playGame(Game* game, Player* p1, Player* p2){
         playRound(game, currentPlayer, otherPlayer);
 
         // summary of game score
-        gameSummary(p1, p2);
+
 
         switchPlayer(&currentPlayer, &otherPlayer, &p1, &p2);
 
         // go to next turn
         game->roundNumber++;
     }
-
+    gameSummary(p1, p2);
     gameOver();
 
     if(p1->totalScore > p2->totalScore) {
@@ -162,7 +160,7 @@ void playGame(Game* game, Player* p1, Player* p2){
             addHighscore(p2->totalScore, p2->name);
         }
     }
-
+    returnToMainMenu();
     return;
 }
 
