@@ -27,7 +27,10 @@ void startGame(Game *game);
  * Postcondition: Displays the rounds.
  * Return: N/A
  */
-void displayPlayer(Player* player);
+//void displayPlayer(Player* player);
+
+
+void displayPlayer(Player* current, Player* opponent);
 
 /**
  * Precondition: N/A
@@ -109,3 +112,4 @@ void leadingRound(Player* winner, Player* loser);
 void highScoreTable();
 void gameOver();
 void displayProbability(Player* player, double probability);
+void returnToMainMenu();
