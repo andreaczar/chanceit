@@ -20,6 +20,10 @@ bool playHumanTurn(Game *game, Player* yourPlayer, Player* opponent){
         response = rollAgain();
 
         if(response == 'q'){
+            gameOver();
+            win(opponent);
+            printf("%s quit the game.\n", yourPlayer->name);
+
             exit(0);
         } else if(response == 'y'){
             return true;
