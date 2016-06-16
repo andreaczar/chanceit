@@ -5,18 +5,25 @@
 #include <unistd.h>
 
 bool playAITurn(Game *game, Player* yourPlayer, Player* opponent){
-	sleep(1);
+	
 
 	printf("AI Point: %d, rollCount: %d\n", yourPlayer->point, yourPlayer->rollCount);
 	printf("Your score: %d, opponent: %d\n", yourPlayer->totalScore, opponent->totalScore);
+	
+	if(game->roundNumber == game->totalRounds && (yourPlayer->totalScore + yourPlayer->roundScore) > opponent->totalScore && yourPlayer->firstTurn == false){
+		return false;
+	}
+	else if (game->roundNumber == game->totalRounds && (yourPlayer->totalScore + yourPlayer->roundScore) <= opponent->totalScore && yourPlayer->firstTurn == false){
+		return true;
+	}
 
 	// 2 or 12 have a 1/36 chance of being rolled again
-	if (yourPlayer->point == 2 || yourPlayer->point == 12){
-		if(yourPlayer->rollCount < 19){
+	else if (yourPlayer->point == 2 || yourPlayer->point == 12){
+		if(yourPlayer->rollCount < 14){
 			return true;
 		}
 		if(yourPlayer->totalScore < opponent->totalScore){
-			if(yourPlayer->rollCount < 27){
+			if(yourPlayer->rollCount < 20){
 				printf("Desperation mode enabled\n");
 				return true;
 			}
@@ -82,12 +89,10 @@ bool playAITurn(Game *game, Player* yourPlayer, Player* opponent){
 			}
 		}
 	}
-//	else if (game->roundNumber == game->totalRounds && yourPlayer->totalScore < opponent->totalScore && yourPlayer->firstTurn == false){
-//		return true;
-//	}
+
 
 	printf("\n\nAI decided to hold....\n\n");
-	sleep(3);
+	
 
 	return false;
 
