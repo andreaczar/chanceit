@@ -23,3 +23,5 @@ int getTurnNumber(int *turnNum);
 int readTurn(int *rollTotal, int *currentTurn, int *roundScore, int *p1Score, int *p2Score);
 
 int waitForPrompt();
+
+int getFinalScore(int *p1, int *p2);

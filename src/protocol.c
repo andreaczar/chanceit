@@ -158,6 +158,22 @@ int getInitialRolls(int *p1, int *p2){
 
 
 }
+int getFinalScore(int *p1, int *p2){
+
+    int bytes;
+    char reply[2048];
+
+    while(1){
+        bytes = clientRecv(reply);
+
+        if(strncmp(reply, "Final Score: ", 13) == 0){
+            sscanf(reply, "Final Score: %*s: %d, %*s: %d", p1, p2);
+            return 0;
+        }
+    }
+
+
+}
 
 int getTurnStart(int *p1Score, int *p2Score){
 
@@ -184,6 +200,7 @@ int isGameOver (char *response){
 	} 
 	return 0;
 }
+
 
 int getTurnNumber(int *turnNum){
 

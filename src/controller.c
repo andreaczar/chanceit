@@ -219,10 +219,14 @@ int playLocalPlayerTurn(Game *game, Player *p, Player *opponent){
             break;
 
         } else if(input == 'p'){
-            printf("Show probability\n");
+			double pro = prob(p);
+			printf("Probability %f\n", pro);
+			//displayProbability(p, pro);
 
         } else if(input == 'q'){
-            printf("Stop game\n");
+            printf("Player Left Game\n");
+			clientSend(("GOODBYE:%s\n", p->name));
+			exit(0);
 
         } else {
             printf("Invalid input: %c", input);
@@ -262,6 +266,7 @@ int playNetworkAITurn(Game *game, Player *p, Player *opponent){
 
     displayPlayer(p, opponent);
     pointSet(p);
+	
 
     // keep asking if they want to roll again until we get
     // something that breaks us out of the loop.
@@ -291,6 +296,7 @@ int playNetworkAITurn(Game *game, Player *p, Player *opponent){
             clientSend("n\n");
             break;
         }
+
 
         roundScore(p);
 
@@ -369,9 +375,17 @@ void playNetworkGame(Game* game, Player* p1, Player* p2, bool ai){
         currRound++;
 
 	}
-
+	
+	//int p1FinalScore;
+	//int p2FinalScore;
+	
+	//getFinalScore(&p1FinalScore, &p2FinalScore);
+	getFinalScore(&p1->totalScore, &p2->totalScore);
+	//p2->totalScore = p2FinalScore;
+	//p1->totalScore = p1FinalScore;
     gameSummary(p1, p2);
     gameOver();
+	
 
     if(p1->totalScore > p2->totalScore) {
         win(p1);
