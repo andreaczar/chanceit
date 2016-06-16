@@ -373,7 +373,22 @@ void playNetworkGame(Game* game, Player* p1, Player* p2, bool ai){
     gameSummary(p1, p2);
     gameOver();
 
-    exit(0);
+    if(p1->totalScore > p2->totalScore) {
+        win(p1);
+
+        if(isHighscore(p1->totalScore)){
+            highScore();
+            addHighscore(p1->totalScore, p1->name);
+        }
+    } else if (p1->totalScore == p2->totalScore){
+        printf("It's a tie!");
+    } else {
+        win(p2);
+        if(isHighscore(p2->totalScore)){
+            highScore();
+            addHighscore(p2->totalScore, p2->name);
+        }
+    }
 }
 
 int main() {
