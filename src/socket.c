@@ -66,7 +66,7 @@ int clientRecv (char *lineBuffer) {
 
             lineBuffer[i] = '\0'; // replace the newline with a NULL
             bufPtr++; // skip over the newline
-            printf("clientRecv at addr %p: <<%s>>\n", lineBuffer, lineBuffer);
+            //printf("clientRecv at addr %p: <<%s>>\n", lineBuffer, lineBuffer);
             return i; // return a count of the # of bytes copied into lineBuffer
         }
 

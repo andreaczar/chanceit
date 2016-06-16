@@ -10,7 +10,7 @@
 #include "highscore.h"
 #include "socket.h"
 #include "protocol.h"
-
+#include "prob.h"
 
 // switch player
 void switchPlayer(Player** currentPlayer, Player** otherPlayer, Player** p1, Player** p2){
@@ -164,6 +164,15 @@ void playGame(Game* game, Player* p1, Player* p2){
     return;
 }
 
+int playNetworkOpponentTurn(Player *p){
+	
+	int p1Score, p2Score, returnCode;
+	returnCode = checkOpponentTurn(&p1Score, &p2Score);
+	p->totalScore = p1Score;
+	return returnCode;
+	
+}
+
 
 void playNetworkGame(Game* game, Player* p1, Player* p2){
     int p1Roll, p2Roll;
@@ -198,11 +207,94 @@ void playNetworkGame(Game* game, Player* p1, Player* p2){
 
     printf("P1 Score: %d\n", p1Score);
     printf("P2 Score: %d\n", p2Score);
-
+	
+	
+	while(currRound < maxRounds){
+		
+		if(p1->firstTurn){
+			//play network player turn
+			handlePlayerTurn(p1);
+			//play network opponent turn
+			playNetworkOpponentTurn(p2);
+			//
+		}
+		else{
+			//Play network opponent turn
+			playNetworkOpponentTurn(p2);
+			//Play network player turn
+			handlePlayerTurn(p1);
+		}
+		
+	}
 
     exit(0);
 }
+int currRound = 1;
+int maxRounds = 20;
+int turnNum = 0;
+int roll = 0;
+int dieOne = 0;
+int dieTwo = 0;
+int dieSum = 0;
+int theFirstTurn = 1;
+char input;
+char name;
+double probability;
+int firstRoll;
+int rollCount = 1;
 
+int handlePlayerTurn(Player *p){
+	/*
+		dieSum = dieOne + dieTwo;
+		//currentPlayer->totalScore += dieSum;
+		
+		
+		if (rollCount == 1){
+			p->point = dieSum;
+		}
+		if (p->point == dieSum && rollCount > 1){
+			printf("You rolled the first roll\n");
+			rollCount = 1;
+			p->roundScore = 0;
+			currRound++;		
+		}
+		
+		
+		else{
+		getTurnNumber(&turnNum);
+		getYourRoll(&dieOne, &dieTwo);
+		
+		printf("You rolled: %d\n", currentPlayer->point);
+			
+		input = rollAgain();
+		printf("%c\n", input);
+		if(input == 'y' || input == 'Y'){
+			clientSend("Y\n");
+			rollCount++;
+		}
+		else if (input == 'n' || input == 'N'){
+			clientSend("n\n");
+			roundScore(currentPlayer);
+			currRound++;
+			
+		}
+		else if (input == 'q' || input == 'Q'){
+			
+			clientSend(("GOODBYE: %s\n", currentPlayer->name));
+		}
+		else if (input == 'p' || input == 'P'){
+			probability = prob(currentPlayer);
+			displayProbability(currentPlayer, probability);
+		}
+		//clientSend(input + 26);
+		//clientRecv(output);
+		
+		}
+	}
+*/
+
+
+}
 
 int main() {
     int playMode, playerRoll, opponentRoll, turnPlayer, turnOpponent, initialRoll;
@@ -281,8 +373,26 @@ int main() {
 
                 break;
             case 4:
+                game->totalRounds = 20;
+                game->roundNumber = 1;
+
                 printf("AI vs Network\n");
-                break;
+                name = getPlayerName();
+                p1 = getAIPlayer(name);
+                printf("Got AI player\n");
+
+
+                serverConnect(IP, port);
+
+                connectPlayer(name);
+
+                //char* opponent;
+                getOpponent(&opponent);
+                p2 = getRemotePlayer(opponent);
+
+                playNetworkGame(game, p1, p2);
+
+                break;				
 
             case 5:
                 displayHighscores();
