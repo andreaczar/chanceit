@@ -366,6 +366,7 @@ void playNetworkGame(Game* game, Player* p1, Player* p2, bool ai){
         game->playerOneScore = p1->totalScore;
         game->playerTwoScore = p2->totalScore;
         game->roundNumber += 1;
+        currRound++;
 
 	}
 
