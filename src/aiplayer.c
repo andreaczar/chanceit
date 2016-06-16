@@ -6,6 +6,10 @@
 
 bool playAITurn(Game *game, Player* yourPlayer, Player* opponent){
 	sleep(1);
+
+	printf("AI Point: %d, rollCount: %d\n", yourPlayer->point, yourPlayer->rollCount);
+	printf("Your score: %d, opponent: %d\n", yourPlayer->totalScore, opponent->totalScore);
+
 	// 2 or 12 have a 1/36 chance of being rolled again
 	if (yourPlayer->point == 2 || yourPlayer->point == 12){
 		if(yourPlayer->rollCount < 19){
@@ -78,16 +82,14 @@ bool playAITurn(Game *game, Player* yourPlayer, Player* opponent){
 			}
 		}
 	}
-	else if (game->roundNumber == game->totalRounds && yourPlayer->totalScore < opponent->totalScore && yourPlayer->firstTurn == false){
-		return true;	
-	}
-	else{
-		printf("AI decided to hold....");
-		sleep(3);
-		
-		return false;
-	}
+//	else if (game->roundNumber == game->totalRounds && yourPlayer->totalScore < opponent->totalScore && yourPlayer->firstTurn == false){
+//		return true;
+//	}
 
+	printf("\n\nAI decided to hold....\n\n");
+	sleep(3);
+
+	return false;
 
 	
 }

@@ -20,8 +20,6 @@ int getYourRoll(int *dieOne, int *dieTwo);
 
 int getTurnNumber(int *turnNum);
 
-int checkOpponentTurn(int *p1, int *p2);
-
-int checkPlayerTurn(int *rollTotal, int *turnScore, int *currentTurn);
+int readTurn(int *rollTotal, int *currentTurn, int *roundScore, int *p1Score, int *p2Score);
 
 int waitForPrompt();

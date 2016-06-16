@@ -158,20 +158,7 @@ void playGame(Game* game, Player* p1, Player* p2){
     return;
 }
 
-int playNetworkOpponentTurn(Game *game, Player *p){
-
-    printf("\n\nWaiting for opponent to finish turn..");
-	int p1Score, p2Score, returnCode;
-	returnCode = checkOpponentTurn(&p1Score, &p2Score);
-	p->totalScore = p1Score;
-    printf("...finished!\n\n");
-	return returnCode;
-	
-}
-
 int playLocalPlayerTurn(Game *game, Player *p, Player *opponent){
-
-    printf("Playing local player turn..\n");
 
     int returnCode = 0;
     p->point = 0;
@@ -179,60 +166,65 @@ int playLocalPlayerTurn(Game *game, Player *p, Player *opponent){
     int rollTotal, turnScore, currentTurn;
     char input;
 
-    displayPlayer(p, opponent);
 
     // do a fake turn to get the point
-    returnCode = checkPlayerTurn(&rollTotal, &turnScore, &currentTurn);
+    returnCode = readTurn(&rollTotal,
+                          &turnScore,
+                          &currentTurn,
+                          &p->totalScore,
+                          &opponent->totalScore);
 
     p->point = rollTotal;
     p->roundScore = rollTotal;
     p->rollCount++;
 
+    displayPlayer(p, opponent);
     pointSet(p);
 
-    while(returnCode == 0){
+    // keep asking if they want to roll again until we get
+    // something that breaks us out of the loop.
+    while(1){
 
-        returnCode = waitForPrompt();
+        input = rollAgain();
 
-        // keep asking if they want to roll again until we get
-        // something that breaks us out of the loop.
-        while(1){
+        if(input == 'y'){
 
-            input = rollAgain();
+            // keep rollin rollin rollin rollin
+            clientSend("Y\n");
 
-            if(input == 'y'){
-                printf("send Y and break\n");
-                clientSend("Y\n");
+            returnCode = readTurn(&rollTotal,
+                                  &turnScore,
+                                  &currentTurn,
+                                  &p->totalScore,
+                                  &opponent->totalScore);
+
+            if(returnCode == -1){
+                p->roundScore = 0;
+                loseRound(p);
                 break;
-
-            } else if(input == 'n'){
-                printf("End turn and break\n");
-                clientSend("n\n");
-                break;
-
-            } else if(input == 'p'){
-                printf("Show probability\n");
-
-            } else if(input == 'q'){
-                printf("Stop game\n");
-            } else {
-                printf("Invalid input: %c", input);
             }
-        }
 
-        returnCode = checkPlayerTurn(&rollTotal, &turnScore, &currentTurn);
+            p->roundScore += rollTotal;
+            p->lastRoll = rollTotal;
+            p->rollCount++;
 
-        if(returnCode == -1){
-            p->roundScore = 0;
-            loseRound(p);
+            roundScore(p);
+
+
+        } else if(input == 'n'){
+            printf("End turn and break\n");
+            clientSend("n\n");
             break;
+
+        } else if(input == 'p'){
+            printf("Show probability\n");
+
+        } else if(input == 'q'){
+            printf("Stop game\n");
+
+        } else {
+            printf("Invalid input: %c", input);
         }
-
-        p->roundScore += rollTotal;
-        p->lastRoll = rollTotal;
-        p->rollCount++;
-
-        roundScore(p);
     }
 
     p->totalScore += p->roundScore;
@@ -243,7 +235,72 @@ int playLocalPlayerTurn(Game *game, Player *p, Player *opponent){
 
 }
 
-void playNetworkGame(Game* game, Player* p1, Player* p2){
+int playNetworkAITurn(Game *game, Player *p, Player *opponent){
+
+    int returnCode = 0;
+    p->point = 0;
+
+    int rollTotal, turnScore, currentTurn;
+    bool again;
+
+    p->rollCount = 0;
+
+    // do a fake turn to get the point
+    returnCode = readTurn(&rollTotal,
+                          &turnScore,
+                          &currentTurn,
+                          &p->totalScore,
+                          &opponent->totalScore);
+
+    p->point = rollTotal;
+    p->roundScore = rollTotal;
+    p->rollCount++;
+
+    displayPlayer(p, opponent);
+    pointSet(p);
+
+    // keep asking if they want to roll again until we get
+    // something that breaks us out of the loop.
+    while(1){
+
+        if(p->playTurn(game, p, opponent)){
+
+            // keep rollin rollin rollin rollin
+            clientSend("Y\n");
+
+            returnCode = readTurn(&rollTotal,
+                                  &turnScore,
+                                  &currentTurn,
+                                  &p->totalScore,
+                                  &opponent->totalScore);
+
+            if(returnCode == -1){
+                p->roundScore = 0;
+                loseRound(p);
+                break;
+            }
+
+            p->roundScore += rollTotal;
+            p->lastRoll = rollTotal;
+            p->rollCount++;
+        } else {
+            clientSend("n\n");
+            break;
+        }
+
+        roundScore(p);
+
+    }
+
+    p->totalScore += p->roundScore;
+
+    roundOver(p);
+
+    return 0;
+
+}
+
+void playNetworkGame(Game* game, Player* p1, Player* p2, bool ai){
 
     int currRound = 1;
     int maxRounds = 20;
@@ -287,23 +344,27 @@ void playNetworkGame(Game* game, Player* p1, Player* p2){
 
 		if(p1->firstTurn){
 
-			//play network player turn
-			playLocalPlayerTurn(game, p1, p2);
-			//play network opponent turn
-			playNetworkOpponentTurn(game, p2);
+            if(ai){
+                playNetworkAITurn(game, p1, p2);
+            } else {
+                playLocalPlayerTurn(game, p1, p2);
+            }
+            printf("\n\nWaiting for player 2 to complete their turn ..\n\n");
 
 		} else {
-			//Play network opponent turn
-			playNetworkOpponentTurn(game, p2);
-			//Play network player turn
-			playLocalPlayerTurn(game, p1, p2);
+
+            printf("\n\nWaiting for player 2 to complete their turn ..\n\n");
+            if(ai){
+                playNetworkAITurn(game, p1, p2);
+            } else {
+                playLocalPlayerTurn(game, p1, p2);
+            }
 		}
 
         game->playerOneScore = p1->totalScore;
         game->playerTwoScore = p2->totalScore;
         game->roundNumber += 1;
 
-        roundOver(p1);
 	}
 
     gameSummary(p1, p2);
@@ -385,7 +446,7 @@ int main() {
                 getOpponent(&opponent);
                 p2 = getRemotePlayer(opponent);
 
-                playNetworkGame(game, p1, p2);
+                playNetworkGame(game, p1, p2, false);
 
                 break;
             case 4:
@@ -406,7 +467,7 @@ int main() {
                 getOpponent(&opponent);
                 p2 = getRemotePlayer(opponent);
 
-                playNetworkGame(game, p1, p2);
+                playNetworkGame(game, p1, p2, true);
 
                 break;				
 

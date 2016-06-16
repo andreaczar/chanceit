@@ -13,6 +13,7 @@ typedef enum {
     waitYouRolled,
     waitRunningTurnScore,
     waitRollDone,
+    waitChanceIt,
 } PlayerTurnState;
 
 int connectPlayer(char* name){
@@ -45,107 +46,79 @@ int waitForPrompt(){
     return 0;
 }
 
-int checkPlayerTurn(int *rollTotal, int *turnScore, int *currentTurn){
-	
+int readTurn(int *rollTotal,  int *currentTurn, int *roundScore, int *p1Score, int *p2Score){
 
-//    PlayerTurnState currentState = initialState == 0 ? waitTurnStartingScore : waitTurn;
-    PlayerTurnState currentState = waitTurn;
+    PlayerTurnState currentState = waitTurnStartingScore;
 
-	int bytes;
+    int bytes;
 
-	char* reply;
-	reply = malloc(sizeof(char)*2048);
- 
-	while(1){
+    char* reply;
+    reply = malloc(sizeof(char)*2048);
 
+    while(1){
 
-//        printf("Recving for player turn:\n");
         bytes = clientRecv(reply);
 
+        switch(currentState){
 
+            case waitTurnStartingScore:
 
-        if(strncmp("Running Turn Score: 0", reply, 21) == 0){
-            printf("Got player score zero, round over\n");
-            *turnScore = 0;
-            free(reply);
-            return -1;
+                if(strncmp("Turn Starting Score: ", reply, 21) == 0){
+                    sscanf(reply, "Turn Starting Score: %d-%d.", p1Score, p2Score);
+                    currentState = waitTurn;
+                }
+                break;
 
-        } else {
+            case waitTurn:
 
-//            printf("State: %d\n", currentState);
+                if(strncmp("Turn#: ", reply, 6) == 0){
+                    sscanf(reply, "Turn#: %d", currentTurn);
+                    currentState = waitRoll;
+                }
+                break;
 
-            switch(currentState){
+            case waitRoll:
+                if(strncmp("Roll#: ", reply, 7) == 0){
+                    sscanf(reply, "Roll#: %d", rollTotal);
+                    currentState = waitYouRolled;
+                }
+                break;
 
-                case waitTurn:
+            case waitYouRolled:
+                if(strncmp("You Rolled: ", reply, 12) == 0){
+                    int rollA = 0;
+                    int rollB = 0;
+                    sscanf(reply, "You Rolled: [%d,%d]", &rollA, &rollB);
+                    *rollTotal = rollA + rollB;
 
-                    if(strncmp("Turn#: ", reply, 6) == 0){
-                        sscanf(reply, "Turn#: %d", currentTurn);
-                        currentState = waitRoll;
-                    }
-                    break;
+                    currentState = waitRunningTurnScore;
+                }
+                break;
 
-                case waitRoll:
-                    if(strncmp("Roll#: ", reply, 7) == 0){
-                        sscanf(reply, "Roll#: %d", rollTotal);
-                        currentState = waitYouRolled;
-                    }
-                    break;
+            case waitRunningTurnScore:
+                if(strncmp("Running Turn Score: ", reply, 20) == 0){
+                    printf("%s\n", reply);
+                    sscanf(reply, "Running Turn Score: %d", roundScore);
+                    currentState = waitRollDone;
+                }
+                break;
 
-                case waitYouRolled:
-                    if(strncmp("You Rolled: ", reply, 12) == 0){
-                        int rollA = 0;
-                        int rollB = 0;
-                        sscanf(reply, "You Rolled: [%d,%d]", &rollA, &rollB);
-                        *rollTotal = rollA + rollB;
+            case waitRollDone:
+                if(strncmp("--", reply, 2) == 0){
+                    if(*roundScore == 0) return -1;
+                    currentState = waitChanceIt;
+                }
 
-                        currentState = waitRunningTurnScore;
-                    }
-                    break;
-
-                case waitRunningTurnScore:
-                    if(strncmp("Running Turn Score: ", reply, 20) == 0){
-                        sscanf(reply, "Running Turn Score: %d", turnScore);
-                        currentState = waitRollDone;
-                    }
-                    break;
-
-                case waitRollDone:
-                    if(strncmp("--", reply, 2) == 0){
-                        // if turn score is zero, player lost, end turn
-                        free(reply);
-
-                        if(*turnScore == 0){
-                            return -1;
-                        }
-
-                        return 0;
-                    }
-            }
+            case waitChanceIt:
+                if(strncmp(reply, "chance-it? [Y/n]", 16) == 0){
+                    return 0;
+                }
         }
 
-	}
-
-    return 0;
+    }
 }
-int checkOpponentTurn(int *p1, int *p2){
-	int bytes;
 
-	char* reply;
-	reply = malloc(sizeof(char)*2048);
 
-	while(1){
-        bytes = clientRecv(reply);
-
-		if(strncmp("Turn Starting Score: ", reply, 21) == 0){
-			sscanf(reply, "Turn Starting Score: %d-%d", p1, p2);
-            free(reply);
-			return 0;
-		}
-	}
-
-    return 0;
-	
-}
 int getOpponent(char **opponent){
     int bytes;
 
