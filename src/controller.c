@@ -174,6 +174,8 @@ int playLocalPlayerTurn(Game *game, Player *p, Player *opponent){
                           &p->totalScore,
                           &opponent->totalScore);
 
+    startRound(game);
+
     p->point = rollTotal;
     p->roundScore = rollTotal;
     p->rollCount++;
@@ -251,6 +253,8 @@ int playNetworkAITurn(Game *game, Player *p, Player *opponent){
                           &currentTurn,
                           &p->totalScore,
                           &opponent->totalScore);
+
+    startRound(game);
 
     p->point = rollTotal;
     p->roundScore = rollTotal;
@@ -339,8 +343,6 @@ void playNetworkGame(Game* game, Player* p1, Player* p2, bool ai){
         displayPlayer(p1, p2);
 
         pointSet(p1);
-
-        startRound(game);
 
 		if(p1->firstTurn){
 
