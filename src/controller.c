@@ -23,11 +23,6 @@ void switchPlayer(Player** currentPlayer, Player** otherPlayer, Player** p1, Pla
     }
 }
 
-/**
- * Play the game (all rounds) for the players tha were setup
- * Return the winning player.
- */
-
 void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
 
     bool doRoll;
@@ -79,7 +74,6 @@ void playRound(Game* game, Player* yourPlayer, Player* otherPlayer){
     // print round over summary for current player
     roundOver(yourPlayer);
 }
-
 
 void playGame(Game* game, Player* p1, Player* p2){
 
@@ -164,18 +158,97 @@ void playGame(Game* game, Player* p1, Player* p2){
     return;
 }
 
-int playNetworkOpponentTurn(Player *p){
-	
+int playNetworkOpponentTurn(Game *game, Player *p){
+
+    printf("\n\nWaiting for opponent to finish turn..");
 	int p1Score, p2Score, returnCode;
 	returnCode = checkOpponentTurn(&p1Score, &p2Score);
 	p->totalScore = p1Score;
+    printf("...finished!\n\n");
 	return returnCode;
 	
 }
 
+int playLocalPlayerTurn(Game *game, Player *p, Player *opponent){
+
+    printf("Playing local player turn..\n");
+
+    int returnCode = 0;
+    p->point = 0;
+
+    int rollTotal, turnScore, currentTurn;
+    char input;
+
+    displayPlayer(p, opponent);
+
+    // do a fake turn to get the point
+    returnCode = checkPlayerTurn(&rollTotal, &turnScore, &currentTurn);
+
+    p->point = rollTotal;
+    p->roundScore = rollTotal;
+    p->rollCount++;
+
+    pointSet(p);
+
+    while(returnCode == 0){
+
+        returnCode = waitForPrompt();
+
+        // keep asking if they want to roll again until we get
+        // something that breaks us out of the loop.
+        while(1){
+
+            input = rollAgain();
+
+            if(input == 'y'){
+                printf("send Y and break\n");
+                clientSend("Y\n");
+                break;
+
+            } else if(input == 'n'){
+                printf("End turn and break\n");
+                clientSend("n\n");
+                break;
+
+            } else if(input == 'p'){
+                printf("Show probability\n");
+
+            } else if(input == 'q'){
+                printf("Stop game\n");
+            } else {
+                printf("Invalid input: %c", input);
+            }
+        }
+
+        returnCode = checkPlayerTurn(&rollTotal, &turnScore, &currentTurn);
+
+        if(returnCode == -1){
+            p->roundScore = 0;
+            loseRound(p);
+            break;
+        }
+
+        p->roundScore += rollTotal;
+        p->lastRoll = rollTotal;
+        p->rollCount++;
+
+        roundScore(p);
+    }
+
+    p->totalScore += p->roundScore;
+
+    roundOver(p);
+
+    return 0;
+
+}
 
 void playNetworkGame(Game* game, Player* p1, Player* p2){
+
+    int currRound = 1;
+    int maxRounds = 20;
     int p1Roll, p2Roll;
+    bool firstRound = true;
     Player* currentPlayer;
     Player* otherPlayer;
 
@@ -203,97 +276,40 @@ void playNetworkGame(Game* game, Player* p1, Player* p2){
 
     int p1Score, p2Score;
 
-    getTurnStart(&p1Score, &p2Score);
+	
+	while(currRound <= maxRounds){
 
-    printf("P1 Score: %d\n", p1Score);
-    printf("P2 Score: %d\n", p2Score);
-	
-	
-	while(currRound < maxRounds){
-		
+        displayPlayer(p1, p2);
+
+        pointSet(p1);
+
+        startRound(game);
+
 		if(p1->firstTurn){
+
 			//play network player turn
-			handlePlayerTurn(p1);
+			playLocalPlayerTurn(game, p1, p2);
 			//play network opponent turn
-			playNetworkOpponentTurn(p2);
-			//
-		}
-		else{
+			playNetworkOpponentTurn(game, p2);
+
+		} else {
 			//Play network opponent turn
-			playNetworkOpponentTurn(p2);
+			playNetworkOpponentTurn(game, p2);
 			//Play network player turn
-			handlePlayerTurn(p1);
+			playLocalPlayerTurn(game, p1, p2);
 		}
-		
+
+        game->playerOneScore = p1->totalScore;
+        game->playerTwoScore = p2->totalScore;
+        game->roundNumber += 1;
+
+        roundOver(p1);
 	}
+
+    gameSummary(p1, p2);
+    gameOver();
 
     exit(0);
-}
-int currRound = 1;
-int maxRounds = 20;
-int turnNum = 0;
-int roll = 0;
-int dieOne = 0;
-int dieTwo = 0;
-int dieSum = 0;
-int theFirstTurn = 1;
-char input;
-char name;
-double probability;
-int firstRoll;
-int rollCount = 1;
-
-int handlePlayerTurn(Player *p){
-	/*
-		dieSum = dieOne + dieTwo;
-		//currentPlayer->totalScore += dieSum;
-		
-		
-		if (rollCount == 1){
-			p->point = dieSum;
-		}
-		if (p->point == dieSum && rollCount > 1){
-			printf("You rolled the first roll\n");
-			rollCount = 1;
-			p->roundScore = 0;
-			currRound++;		
-		}
-		
-		
-		else{
-		getTurnNumber(&turnNum);
-		getYourRoll(&dieOne, &dieTwo);
-		
-		printf("You rolled: %d\n", currentPlayer->point);
-			
-		input = rollAgain();
-		printf("%c\n", input);
-		if(input == 'y' || input == 'Y'){
-			clientSend("Y\n");
-			rollCount++;
-		}
-		else if (input == 'n' || input == 'N'){
-			clientSend("n\n");
-			roundScore(currentPlayer);
-			currRound++;
-			
-		}
-		else if (input == 'q' || input == 'Q'){
-			
-			clientSend(("GOODBYE: %s\n", currentPlayer->name));
-		}
-		else if (input == 'p' || input == 'P'){
-			probability = prob(currentPlayer);
-			displayProbability(currentPlayer, probability);
-		}
-		//clientSend(input + 26);
-		//clientRecv(output);
-		
-		}
-	}
-*/
-
-
 }
 
 int main() {
