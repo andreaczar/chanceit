@@ -6,10 +6,6 @@
 
 bool playAITurn(Game *game, Player* yourPlayer, Player* opponent){
 	
-
-	printf("AI Point: %d, rollCount: %d\n", yourPlayer->point, yourPlayer->rollCount);
-	printf("Your score: %d, opponent: %d\n", yourPlayer->totalScore, opponent->totalScore);
-	
 	if(game->roundNumber == game->totalRounds && (yourPlayer->totalScore + yourPlayer->roundScore) > opponent->totalScore && yourPlayer->firstTurn == false){
 		return false;
 	}

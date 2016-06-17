@@ -1,5 +1,3 @@
-//Socket.c
-//#include stuff here
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -17,8 +15,6 @@ static int bufSize = 1024;
 struct sockaddr_in server;
 
 int serverConnect (char *ip, int port){
-
-    printf("%s, %d\n", ip, port);
 	//Basic C socket connection stuff
 	//D2L tutorial for socketConnect
 	//Return 1 = conn successful, 0 = error
@@ -30,12 +26,9 @@ int serverConnect (char *ip, int port){
         printf("Could not create socket");
     }
 
-    puts("Socket created\n");
-
     server.sin_addr.s_addr = inet_addr(ip);
     server.sin_family = AF_INET;
     server.sin_port = htons(port);
-
 
     //Connect to remote server
     if (connect(sock, (struct sockaddr *)&server , sizeof(server)) < 0){
@@ -63,10 +56,9 @@ int clientRecv (char *lineBuffer) {
     while (bufPtr < bufSize) { // while buffer contains data
 
         if (buffer[bufPtr] == '\n') {
-
             lineBuffer[i] = '\0'; // replace the newline with a NULL
             bufPtr++; // skip over the newline
-//            printf("clientRecv at addr %p: <<%s>>\n", lineBuffer, lineBuffer);
+            //printf("Received: <<%s>>\n", lineBuffer);
             return i; // return a count of the # of bytes copied into lineBuffer
         }
 

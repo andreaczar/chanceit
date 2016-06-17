@@ -174,10 +174,14 @@ int playLocalPlayerTurn(Game *game, Player *p, Player *opponent){
                           &p->totalScore,
                           &opponent->totalScore);
 
-    startRound(game);
+    if(returnCode == 2){
+        return 2;
+    }
 
-    p->point = rollTotal;
-    p->roundScore = rollTotal;
+    startRound(game); ///displays START ROUND #
+
+    p->point = rollTotal; /// totals up the roll received from server
+    p->roundScore = rollTotal; // sets initial round score to point score
     p->rollCount++;
 
     displayPlayer(p, opponent);
@@ -202,8 +206,11 @@ int playLocalPlayerTurn(Game *game, Player *p, Player *opponent){
 
             if(returnCode == -1){
                 p->roundScore = 0;
+                p->lastRoll = rollTotal;
                 loseRound(p);
                 break;
+            } else if(returnCode == 2){
+                return 2;
             }
 
             p->roundScore += rollTotal;
@@ -212,21 +219,18 @@ int playLocalPlayerTurn(Game *game, Player *p, Player *opponent){
 
             roundScore(p);
 
-
         } else if(input == 'n'){
-            printf("End turn and break\n");
             clientSend("n\n");
             break;
 
         } else if(input == 'p'){
 			double pro = prob(p);
 			printf("Probability %f\n", pro);
-			//displayProbability(p, pro);
 
         } else if(input == 'q'){
-            printf("Player Left Game\n");
+            printf("%s Left Game\n", p->name);
 			clientSend(("GOODBYE:%s\n", p->name));
-			exit(0);
+			return 3;
 
         } else {
             printf("Invalid input: %c", input);
@@ -258,6 +262,10 @@ int playNetworkAITurn(Game *game, Player *p, Player *opponent){
                           &p->totalScore,
                           &opponent->totalScore);
 
+    if(returnCode == 2){
+        return 2;
+    }
+
     startRound(game);
 
     p->point = rollTotal;
@@ -285,8 +293,11 @@ int playNetworkAITurn(Game *game, Player *p, Player *opponent){
 
             if(returnCode == -1){
                 p->roundScore = 0;
+                p->lastRoll = rollTotal; // added to display update point
                 loseRound(p);
                 break;
+            } else if(returnCode == 2){
+                return 2;
             }
 
             p->roundScore += rollTotal;
@@ -315,13 +326,13 @@ void playNetworkGame(Game* game, Player* p1, Player* p2, bool ai){
     int currRound = 1;
     int maxRounds = 20;
     int p1Roll, p2Roll;
+    int p1Score, p2Score;
     bool firstRound = true;
     Player* currentPlayer;
     Player* otherPlayer;
 
     startGame(game);
     getInitialRolls(&p1Roll, &p2Roll);
-
 
     p1->lastRoll = p1Roll;
     p2->lastRoll = p2Roll;
@@ -341,48 +352,44 @@ void playNetworkGame(Game* game, Player* p1, Player* p2, bool ai){
 
     firstPlayer(currentPlayer, otherPlayer);
 
-    int p1Score, p2Score;
+    int returnCode;
 
-	
 	while(currRound <= maxRounds){
-
-        displayPlayer(p1, p2);
-
-        pointSet(p1);
 
 		if(p1->firstTurn){
 
             if(ai){
-                playNetworkAITurn(game, p1, p2);
+                returnCode = playNetworkAITurn(game, p1, p2);
             } else {
-                playLocalPlayerTurn(game, p1, p2);
+                returnCode = playLocalPlayerTurn(game, p1, p2);
             }
-            printf("\n\nWaiting for player 2 to complete their turn ..\n\n");
+            printf("\n\nWaiting for player 2 (%s) to complete their turn ..\n\n", p2->name);
 
 		} else {
 
-            printf("\n\nWaiting for player 2 to complete their turn ..\n\n");
+            printf("\n\nWaiting for player 2 (%s) to complete their turn ..\n\n", p2->name);
             if(ai){
-                playNetworkAITurn(game, p1, p2);
+                returnCode = playNetworkAITurn(game, p1, p2);
             } else {
-                playLocalPlayerTurn(game, p1, p2);
+                returnCode = playLocalPlayerTurn(game, p1, p2);
             }
 		}
+
+        if(returnCode == 2){
+            printf("Other player %s disconnected\n", otherPlayer->name);
+            break; // stop playing game
+        } else if(returnCode == 3){
+            return;
+        }
 
         game->playerOneScore = p1->totalScore;
         game->playerTwoScore = p2->totalScore;
         game->roundNumber += 1;
         currRound++;
-
 	}
-	
-	//int p1FinalScore;
-	//int p2FinalScore;
-	
-	//getFinalScore(&p1FinalScore, &p2FinalScore);
-	getFinalScore(&p1->totalScore, &p2->totalScore);
-	//p2->totalScore = p2FinalScore;
-	//p1->totalScore = p1FinalScore;
+
+	getFinalScore(&currentPlayer->totalScore, &otherPlayer->totalScore);
+
     gameSummary(p1, p2);
     gameOver();
 	
@@ -467,7 +474,6 @@ int main() {
                 printf("Player vs Network\n");
                 name = getPlayerName();
                 p1 = getHumanPlayer(name);
-                printf("Got human player\n");
 
 
                 serverConnect(IP, port);
@@ -488,14 +494,12 @@ int main() {
                 printf("AI vs Network\n");
                 name = getPlayerName();
                 p1 = getAIPlayer(name);
-                printf("Got AI player\n");
 
 
                 serverConnect(IP, port);
 
                 connectPlayer(name);
 
-                //char* opponent;
                 getOpponent(&opponent);
                 p2 = getRemotePlayer(opponent);
 

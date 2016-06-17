@@ -23,18 +23,14 @@ int connectPlayer(char* name){
 	hello = malloc(sizeof(char) * strlen(name));
 	sprintf(hello, "HELLO:%s\n", name);
 
-	printf("Sending: %s\n", hello);
-
 	clientSend(hello);
 	free(hello);
-	printf("Sent\n");
 }
 
 
 int waitForPrompt(){
     int bytes;
-    char* reply;
-    reply = malloc(2048);
+    char reply[2048];
 
     while(1){
         bytes = clientRecv(reply);
@@ -52,12 +48,15 @@ int readTurn(int *rollTotal,  int *currentTurn, int *roundScore, int *p1Score, i
 
     int bytes;
 
-    char* reply;
-    reply = malloc(sizeof(char)*2048);
+    char reply[2048];
 
     while(1){
 
         bytes = clientRecv(reply);
+
+        if(strncmp(reply, "You Win!", 7) == 0 || strncmp(reply, "You Lose", 7) == 0){
+            return 2;
+        }
 
         switch(currentState){
 
@@ -97,7 +96,6 @@ int readTurn(int *rollTotal,  int *currentTurn, int *roundScore, int *p1Score, i
 
             case waitRunningTurnScore:
                 if(strncmp("Running Turn Score: ", reply, 20) == 0){
-                    printf("%s\n", reply);
                     sscanf(reply, "Running Turn Score: %d", roundScore);
                     currentState = waitRollDone;
                 }
@@ -114,7 +112,6 @@ int readTurn(int *rollTotal,  int *currentTurn, int *roundScore, int *p1Score, i
                     return 0;
                 }
         }
-
     }
 }
 
@@ -122,8 +119,7 @@ int readTurn(int *rollTotal,  int *currentTurn, int *roundScore, int *p1Score, i
 int getOpponent(char **opponent){
     int bytes;
 
-	char* reply;
-	reply = malloc(sizeof(char)*2048);
+	char reply[2048];
 
     *opponent = malloc(sizeof(char)*bytes);
 
@@ -133,19 +129,16 @@ int getOpponent(char **opponent){
 
 		if(strncmp("Opponent:", reply, 9) == 0){
 			sscanf(reply, "Opponent: %s", *opponent);
-            free(reply);
 			return 1;
 		}
 	}
-
     return 0;
 }
 
 int getInitialRolls(int *p1, int *p2){
 
     int bytes;
-    char* reply;
-    reply = malloc(2048);
+    char reply[2048];
 
     while(1){
         bytes = clientRecv(reply);
@@ -155,8 +148,6 @@ int getInitialRolls(int *p1, int *p2){
             return 0;
         }
     }
-
-
 }
 int getFinalScore(int *p1, int *p2){
 
@@ -167,19 +158,17 @@ int getFinalScore(int *p1, int *p2){
         bytes = clientRecv(reply);
 
         if(strncmp(reply, "Final Score: ", 13) == 0){
-            sscanf(reply, "Final Score: %*s: %d, %*s: %d", p1, p2);
+            sscanf(reply, "Final Score: %*s %d, %*s %d", p1, p2);
+
             return 0;
         }
     }
-
-
 }
 
 int getTurnStart(int *p1Score, int *p2Score){
 
     int bytes;
-    char* reply;
-    reply = malloc(2048);
+    char reply[2048];
 
     while(1){
         printf("Getting turn start..\n");
@@ -190,8 +179,6 @@ int getTurnStart(int *p1Score, int *p2Score){
             return 0;
         }
     }
-
-
 }
 
 int isGameOver (char *response){
@@ -205,8 +192,7 @@ int isGameOver (char *response){
 int getTurnNumber(int *turnNum){
 
     int bytes;
-    char* reply;	
-    reply = malloc(2048);
+    char reply[2048];
     while(1){
         bytes = clientRecv(reply);
 		
@@ -215,15 +201,12 @@ int getTurnNumber(int *turnNum){
             return 0;
         }
     }
-
-
 }
 
 int getRollNumber(int *rollNumber){
 
     int bytes;
-    char* reply;
-    reply = malloc(2048);
+    char reply[2048];
 
     while(1){
         bytes = clientRecv(reply);
@@ -233,15 +216,12 @@ int getRollNumber(int *rollNumber){
             return 0;
         }
     }
-
-
 }
 
 int getYourRoll(int *dieOne, int *dieTwo){
 
     int bytes;
-    char* reply;
-    reply = malloc(2048);
+    char reply[2048];
 
     while(1){
         bytes = clientRecv(reply);
@@ -251,6 +231,4 @@ int getYourRoll(int *dieOne, int *dieTwo){
             return 0;
         }
     }
-
-
 }
