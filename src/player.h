@@ -48,5 +48,9 @@ Player* getNetworkPlayer(char* name);
  */
 Player* getAIPlayer(char* name);
 
-
+/**
+ * Precondition: A game has been established
+ * Postcondition: Sets up and makes a Remote Player
+ * Return: An Remote player playing on the network
+ */
 Player* getRemotePlayer(char* name);
