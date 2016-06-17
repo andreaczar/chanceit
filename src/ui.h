@@ -68,7 +68,11 @@ void roundScore(Player* player);
  * Postcondition: Displays the first roll.
  */
 void pointSet(Player* player);
-
+/**
+* Precondition: Game has been started
+* Postcondition: Gets a username from the user
+* Returns: the username that was entered by the user
+**/
 char* getPlayerName();
 
 /**
@@ -77,7 +81,6 @@ char* getPlayerName();
  * Returns: A character (upper or lowercase y, n, p, q) or an error message.
  */
 char rollAgain();
-
 
 /**
  * Precondition: N/A
@@ -91,8 +94,6 @@ void win(Player* player);
  */
 void gameSummary(Player* p1, Player* p2);
 
-
-//Not implemented yet
 /**
  * Precondition: User wants the high score table
  * Postcondition: Displays the text file of the high score table.
@@ -109,7 +110,38 @@ bool playAgain();
  * Postcondition: Displays a prompt asking if you want to play again.
  */
 void leadingRound(Player* winner, Player* loser);
+/**
+*  Precondition: N/A
+*  Postcondition: Displays a response saying that you got a high score
+*/
+void highScore();
+/**
+*  Precondition: N/A
+*  Postcondition: Displays ascii art for the highscore table.
+*/
 void highScoreTable();
+/**
+*  Precondition: Game has been ended
+*  Postcondition: Displays ASCII art for the gave over screen
+*/
 void gameOver();
+/**
+*  Precondition: Probability has been called
+*  Postcondition: Displays probability of rolling first roll again.
+*/
 void displayProbability(Player* player, double probability);
+/**
+*  Precondition: Game is over
+*  Postcondition: Re-Displays main menu screen
+**/
 void returnToMainMenu();
+/**
+*  Precondition: N/A
+*  Postcondition: Prints a side at the beginning and end of the screen
+**/
+void printSide();
+/**
+*  Precondition: N/A
+*  Postcondition: Prints a asterisk bar
+**/
+void printBar();
