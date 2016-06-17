@@ -4,6 +4,7 @@ SRCDIR=./src
 
 chanceit:	player controller roll prob ui input game humanplayer aiplayer highscore socket protocol
 	mkdir -p $(BINDIR)
+	mkdir -p $(BUILDDIR)
 	gcc -o $(BINDIR)/chanceit $(BUILDDIR)/roll.o $(BUILDDIR)/prob.o $(BUILDDIR)/player.o $(BUILDDIR)/ui.o $(BUILDDIR)/controller.o $(BUILDDIR)/input.o $(BUILDDIR)/game.o $(BUILDDIR)/humanplayer.o $(BUILDDIR)/aiplayer.o $(BUILDDIR)/highscore.o $(BUILDDIR)/socket.o $(BUILDDIR)/protocol.o
 
 controller:	$(SRCDIR)/roll.h $(SRCDIR)/ui.h $(SRCDIR)/prob.h $(SRCDIR)/socket.h
@@ -23,6 +24,7 @@ input:	$(SRCDIR)/input.c $(SRCDIR)/input.h
 	gcc -c $(SRCDIR)/input.c -o $(BUILDDIR)/input.o
 
 player:	$(SRCDIR)/player.c $(SRCDIR)/player.h $(SRCDIR)/game.h $(SRCDIR)/humanplayer.h
+	mkdir -p build
 	gcc -c $(SRCDIR)/player.c -o $(BUILDDIR)/player.o
 
 game:	$(SRCDIR)/game.h $(SRCDIR)/game.c
