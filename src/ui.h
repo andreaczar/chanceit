@@ -27,9 +27,6 @@ void startGame(Game *game);
  * Postcondition: Displays the rounds.
  * Return: N/A
  */
-//void displayPlayer(Player* player);
-
-
 void displayPlayer(Player* current, Player* opponent);
 
 /**
