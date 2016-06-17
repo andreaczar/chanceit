@@ -6,74 +6,40 @@ typedef struct {
 } TurnInfo;
 
 /*
-* Precondition: Connection has been made from the server
-* Postcondition: Displays that the connection has been made 
-* Cleanup: Frees up the message recieved.
+* Precondition: N/A
+* Postcondition: a connection is made
+* Cleanup: Frees up the message sent to server.
 * Returns: N/A
 */
 int connectPlayer(char *name);
 
 /*
-* Precondition: Connection has been made from the server
-* Postcondition: Gets an opponent from the server
-* Cleanup: Frees up the message recieved.
-* Returns: 1 if successful and zero otherwise
+* Precondition: Connection has been made to the server
+* Postcondition: Gets the opponent's name from the server
+* Returns: 1 if successful, 0 otherwise
 */
 int getOpponent(char **opponent);
 
-/*
-* Precondition: Connection has been made from the server
-* Postcondition: Displays the winner of the game
-* Cleanup: Frees up the message recieved.
-* Returns: A one if it was successful and a zero if not
-*/
-int isGameOver(char *response);
 
 /*
-* Precondition: Connection has been made from the server
-* Postcondition: Displays the initial rolls to determine who goes first 
-* Cleanup: Frees up the message recieved.
+* Precondition: Connection has been made to the server
+* Postcondition: Initial rolls for both players is stored in parameters p1 and p2
 * Returns: A zero if succesful and nothing otherwise
 */
 int getInitialRolls(int *p1, int *p2);
 
 /*
-* Precondition: Connection has been made from the server
-* Postcondition: Displays the starting score of both players
-* Cleanup: Frees up the message recieved
-* Returns: integer 0 if ok, nothing otherwise
-*/
-int getTurnStart(int *p1Score, int *p2Score);
-
-/*
-* Precondition: Connection has been made from the server
-* Postcondition: Displays the roll you made 
-* Cleanup: Frees up the message recieved
-* Returns: A zero if successful and nothing otherwise
-*/
-int getYourRoll(int *dieOne, int *dieTwo);
-
-/*
-* Precondition: Connection has been made from the server
-* Postcondition: Displays the turn number
-* Cleanup: Frees up the message recieved
-* Returns: A 0 if successful. Nothing otherwise
-*/
-int getTurnNumber(int *turnNum);
-
-/*
-* Precondition: Connection has been made from the server
-* Postcondition: Continously parses through the information on the server 
-* until it hit's the 'chance-it' string
-* Cleanup: Frees up the message recieved
-* Returns: An integer of zero if it worked and nothing otherwise 
+* Precondition: A turn is waiting in the buffer
+* Postcondition: Turn information is stored in passed parameters
+* Returns: -1 if round score is 0,
+ *          0 if round score > 0
+ *          2 if game ended
 */
 int readTurn(int *rollTotal, int *currentTurn, int *roundScore, int *p1Score, int *p2Score);
 
 /*
-* Precondition: Connection has been made from the server
-* Postcondition: Displays the 'chance it?' message
-* Cleanup: Frees up the message recieved.
-* Returns: An integer of zero if it worked and nothing otherwise 
+* Precondition: A game has ended and input has not been read.
+* Postcondition: Final score stored in parameters p1 and p2.
+* Returns: 0 if successful
 */
-int waitForPrompt();
+int getFinalScore(int *p1, int *p2);

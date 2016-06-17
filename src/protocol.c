@@ -28,20 +28,6 @@ int connectPlayer(char* name){
 }
 
 
-int waitForPrompt(){
-    int bytes;
-    char reply[2048];
-
-    while(1){
-        bytes = clientRecv(reply);
-
-        if(strncmp(reply, "chance-it? [Y/n]", 16) == 0){
-            return 0;
-        }
-    }
-    return 0;
-}
-
 int readTurn(int *rollTotal,  int *currentTurn, int *roundScore, int *p1Score, int *p2Score){
 
     PlayerTurnState currentState = waitTurnStartingScore;
@@ -165,70 +151,3 @@ int getFinalScore(int *p1, int *p2){
     }
 }
 
-int getTurnStart(int *p1Score, int *p2Score){
-
-    int bytes;
-    char reply[2048];
-
-    while(1){
-        printf("Getting turn start..\n");
-        bytes = clientRecv(reply);
-
-        if(strncmp(reply, "Turn Starting Score: ", 20) == 0){
-            sscanf(reply, "Turn Starting Score: %d-%d.", p1Score, p2Score);
-            return 0;
-        }
-    }
-}
-
-int isGameOver (char *response){
-	if (strncmp(response, "You win!", 8) == 0 || strncmp(response, "You Lose", 8) == 0){
-		return 1;
-	} 
-	return 0;
-}
-
-
-int getTurnNumber(int *turnNum){
-
-    int bytes;
-    char reply[2048];
-    while(1){
-        bytes = clientRecv(reply);
-		
-        if(strncmp(reply, "Turn#: ", 7) == 0){
-            sscanf(reply, "Turn#: %d", turnNum);
-            return 0;
-        }
-    }
-}
-
-int getRollNumber(int *rollNumber){
-
-    int bytes;
-    char reply[2048];
-
-    while(1){
-        bytes = clientRecv(reply);
-
-        if(strncmp(reply, "Roll#: ", 20) == 0){
-            sscanf(reply, "Roll#: %d.", rollNumber);
-            return 0;
-        }
-    }
-}
-
-int getYourRoll(int *dieOne, int *dieTwo){
-
-    int bytes;
-    char reply[2048];
-
-    while(1){
-        bytes = clientRecv(reply);
-
-        if(strncmp(reply, "You Rolled: ", 12) == 0){
-            sscanf(reply, "You Rolled: [%d,%d]", dieOne, dieTwo);
-            return 0;
-        }
-    }
-}

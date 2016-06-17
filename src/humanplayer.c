@@ -3,14 +3,8 @@
 #include "roll.h"
 #include "ui.h"
 #include "prob.h"
-/*
- * Play the human turn.
- *
- * this should probably talk to the ui.
- *
- * Should probably present some kind of output to the player (roll infos, probabilities, etc),
- * accept input then return the roll (or the skip with ??roll == 0??)
- */
+
+
 bool playHumanTurn(Game *game, Player* yourPlayer, Player* opponent){
 
 
@@ -23,7 +17,6 @@ bool playHumanTurn(Game *game, Player* yourPlayer, Player* opponent){
             gameOver();
             win(opponent);
             printf("%s quit the game.\n", yourPlayer->name);
-
             exit(0);
         } else if(response == 'y'){
             return true;
@@ -33,9 +26,6 @@ bool playHumanTurn(Game *game, Player* yourPlayer, Player* opponent){
             //show probability
             double p = prob(yourPlayer);
             displayProbability(yourPlayer, p);
-
         }
     }
-
-
 }
