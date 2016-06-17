@@ -6,3 +6,6 @@
 3. Run with ./bin/chanceit
 4. ???
 5. Profit!
+
+
+###May the odds ever be in your favour!
